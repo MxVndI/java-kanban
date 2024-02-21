@@ -1,6 +1,10 @@
+import Manager.TaskManager;
+
 public class Main {
 
     public static void main(String[] args) {
-        System.out.println("Поехали!");
+        TaskManager taskManager = new TaskManager();
+        while(taskManager.menu());
+
     }
 }
