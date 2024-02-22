@@ -3,9 +3,13 @@ package Logic;
 public class SubTask extends Task {
     private int epicId;
 
-    public SubTask(String description, String name, TaskType type, int epicId) {
-        super(description, name, type);
+    public SubTask(String description, String name, int id, int epicId) {
+        super(description, name, id);
         this.epicId = epicId;
+    }
+
+    public TaskType getType() {
+        return TaskType.SUBTASK;
     }
 
     public int getEpicId() {

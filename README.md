@@ -1,2 +1,2 @@
 # java-kanban
-Repository for homework project.
+Я не понимаю что нужно сделать с вводом, как управлять тогда приложением...

@@ -7,14 +7,13 @@ public class Task {
     protected String description;
     protected String name;
     protected TaskStatus status;
-    protected TaskType type;
 
-    public Task(String description, String name, TaskType type) {
+
+    public Task(String description, String name, int id) {
         this.description = description;
         this.name = name;
         status = TaskStatus.NEW;
-        id = hashCode();
-        this.type = type;
+        this.id = id;
     }
 
     public int getId() {
@@ -22,13 +21,12 @@ public class Task {
     }
 
     public TaskType getType() {
-        return type;
+       return TaskType.TASK;
     }
 
     public void setStatus(TaskStatus status) {
-        if (this.type != TaskType.EPIC)
+        if (this.getType() != TaskType.EPIC)
             this.status = status;
-        id = hashCode();
     }
 
     public String getDescription() {
@@ -54,15 +52,16 @@ public class Task {
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
-        if(obj == null || obj.getClass().equals(this.getClass()) == false)
+        if(obj == null || !obj.getClass().equals(this.getClass()))
             return false;
         Task task = (Task) obj;
-        return task.name == name && task.status == status && task.id == id && task.description == description;
+        return Objects.equals(task.name, name) && task.status == status && task.id == id &&
+                Objects.equals(task.description, description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, description, status, type);
+        return Objects.hash(name, description, status);
     }
 
     @Override

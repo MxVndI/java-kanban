@@ -4,11 +4,15 @@ import Logic.*;
 
 
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class TaskManager {
 
+    private static int specCode=0;
     private HashMap<Integer, Task> tasks = new HashMap<>();
+    private HashMap<Integer, SubTask> subTasks = new HashMap<>();
+    private HashMap<Integer, Epic> epics = new HashMap<>();
     private Scanner scanner = new Scanner(System.in);
 
     public TaskType choseType() {
@@ -23,76 +27,94 @@ public class TaskManager {
     }
 
     private void addSubtask(SubTask task, int id) {
-        tasks.put(task.getId(), task);
-        Epic epic = (Epic) tasks.get(id);
-        epic.addSubTask(task);
+        subTasks.put(task.getId(), task);
+        epics.get(id).addSubTask(task);
     }
 
     private void addSubtask(int id) {
+        specCode++;
         System.out.println("Введите название задачи");
         String name = scanner.nextLine();
         System.out.println("Введите описание задачи");
         String description = scanner.nextLine();
-        SubTask task = new SubTask(description, name, TaskType.SUBTASK, id);
+        SubTask task = new SubTask(description, name, specCode, id);
         addSubtask(task, id);
     }
 
     private void addTask(Task task) {
+        specCode++;
         tasks.put(task.getId(), task);
-
     }
 
     private void addEpic(Epic task) {
-        tasks.put(task.getId(), task);
+        specCode++;
+        epics.put(task.getId(), task);
     }
 
     private void printTasks(TaskType type) {
-        for (Task task : tasks.values()) {
-            if (task.getType() == type)
-                System.out.println(task.toString());
-        }
+        if (type == TaskType.TASK)
+        for (Task task : tasks.values())
+            System.out.println(task.toString());
+        else if (type == TaskType.EPIC)
+            for (Epic epic: epics.values())
+                System.out.println(epic.toString());
+        else if (type == TaskType.SUBTASK)
+            for (SubTask subTask: subTasks.values())
+                System.out.println(subTask.toString());
     }
 
     private void removeAll(TaskType type) {
-        for (Integer task : tasks.keySet()) {
-            if (tasks.get(task).getType() == type) {
-                System.out.println(task);
-                if (tasks.get(task).getType() == TaskType.EPIC) {
-                    Epic epic = (Epic) tasks.get(task);
-                    epic.removeSubtasks();
-                }
-                if (tasks.get(task).getType() == TaskType.SUBTASK) {
-                    SubTask subTask = (SubTask) tasks.get(task);
-                    Epic epic = (Epic) tasks.get(subTask.getEpicId());
-                    epic.removeSubtask(task);
-                }
-                System.out.println(task);
-                tasks.remove(task);
-            }
+        if (type.equals(TaskType.TASK))
+            tasks.clear();
+        else if (type.equals(TaskType.SUBTASK)) {
+            for (Epic epic: epics.values())
+                epic.removeSubtasks();
+            subTasks.clear();
+        }
+        else if (type.equals(TaskType.EPIC)) {
+            for (Epic epic: epics.values())
+                epic.removeSubtasks();
+            epics.clear();
         }
     }
 
-    private void printByCode(TaskType type) {
+    private Task printByCode(TaskType type) {
         System.out.println("Введите идентификатор");
         Integer code = Integer.parseInt(scanner.nextLine());
-        if (tasks.get(code).getType() == type)
-            System.out.println(tasks.get(code));
-        else
-            System.out.println("Неверно указан тип задачи");
+        if (type.equals(TaskType.TASK)) {
+            System.out.println(tasks.get(code).toString());
+            return tasks.get(code);
+        }
+        else if (type.equals(TaskType.SUBTASK)) {
+            System.out.println(subTasks.get(code).toString());
+            return subTasks.get(code);
+        }
+        else if (type.equals(TaskType.EPIC)) {
+            System.out.println(epics.get(code).toString());
+            return epics.get(code);
+        }
+        else {
+            System.out.println("Неверный идентификатор");
+            return null;
+        }
     }
 
     private void removeByCode(TaskType type) {
         System.out.println("Введите идентификатор");
         Integer code = Integer.parseInt(scanner.nextLine());
-        if (tasks.get(code).getType() == type) {
-            if (tasks.get(code).getType() == TaskType.EPIC) {
-                Epic epic = (Epic) tasks.get(code);
-                epic.removeSubtasks();
-            }
+        if (type == TaskType.TASK) {
             tasks.remove(code);
         }
-            else
-                System.out.println("Неверно указан тип задачи");
+        else if (type == TaskType.EPIC) {
+            epics.get(code).removeSubtasks();
+            epics.remove(code);
+        }
+        else if (type == TaskType.SUBTASK)  {
+            epics.get(subTasks.get(code).getId()).removeSubtask(code);
+            subTasks.remove(code);
+        }
+        else
+            System.out.println("Неверно указан тип задачи");
     }
 
     private void refresh(TaskType type) {
@@ -101,17 +123,24 @@ public class TaskManager {
         else {
             System.out.println("Введите идентификатор");
             Integer code = Integer.parseInt(scanner.nextLine());
-            if (tasks.get(code).getType() == TaskType.EPIC) { // если выбрали не EPIC но ввели ID эпика
-                System.out.println("Не-а, нельзя");
-                return;
+            if (type == TaskType.TASK) {
+                System.out.println("Введите новый статус задачи \n" +
+                        "NEW \n" +
+                        "DONE \n" +
+                        "IN_PROGRESS \n");
+                String temp = scanner.nextLine();
+                TaskStatus status = TaskStatus.valueOf(temp);
+                tasks.get(code).setStatus(status);
             }
-            System.out.println("Введите новый статус задачи \n" +
-                    "NEW \n" +
-                    "DONE \n" +
-                    "IN_PROGRESS \n");
-            String temp = scanner.nextLine();
-            TaskStatus status = TaskStatus.valueOf(temp);
-            tasks.get(code).setStatus(status);
+            if (type == TaskType.SUBTASK) {
+                System.out.println("Введите новый статус задачи \n" +
+                        "NEW \n" +
+                        "DONE \n" +
+                        "IN_PROGRESS \n");
+                String temp = scanner.nextLine();
+                TaskStatus status = TaskStatus.valueOf(temp);
+                subTasks.get(code).setStatus(status);
+            }
         }
     }
 
@@ -154,15 +183,15 @@ public class TaskManager {
                 System.out.println("Введите описание задачи");
                 String description = scanner.nextLine();
                 if (type == TaskType.TASK) {
-                    Task task = new Task(description, name, TaskType.TASK);
+                    Task task = new Task(description, name, specCode);
                     addTask(task);
                 } else if (type == TaskType.EPIC) {
-                    Epic task = new Epic(description, name, TaskType.EPIC);
+                    Epic task = new Epic(description, name, specCode);
                     addEpic(task);
                 } else if (type == TaskType.SUBTASK) {
                     System.out.println("Введите id главной задачи");
                     int id = Integer.parseInt(scanner.nextLine());
-                    SubTask task = new SubTask(description, name, TaskType.SUBTASK, id);
+                    SubTask task = new SubTask(description, name, specCode, id);
                     addSubtask(task, id);
                 }
                 break;
@@ -176,9 +205,9 @@ public class TaskManager {
                 if (type == TaskType.EPIC) {
                     System.out.println("Введите идентификатор эпика");
                     int id = Integer.parseInt(scanner.nextLine());
-                    if (tasks.containsKey(id) && tasks.get(id).getType() == TaskType.EPIC) {
+                    if (epics.containsKey(id)) {
                         Epic epic = (Epic) tasks.get(id);
-                        epic.printSubTasks();
+                        epic.getSubTasks();
                     } else
                         System.out.println("Такой задачи нет");
                 } else {
@@ -189,8 +218,7 @@ public class TaskManager {
                 if (type == TaskType.EPIC) {
                     System.out.println("Введите идентификатор эпика");
                     int id = Integer.parseInt(scanner.nextLine());
-                    if (tasks.containsKey(id) && tasks.get(id).getType() == TaskType.EPIC) {
-                        Epic epic = (Epic) tasks.get(id);
+                    if (epics.containsKey(id)) {
                         addSubtask(id);
                     } else
                         System.out.println("Такой задачи нет");
