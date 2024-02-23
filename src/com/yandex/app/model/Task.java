@@ -1,4 +1,4 @@
-package Logic;
+package com.yandex.app.model;
 
 import java.util.Objects;
 
@@ -21,7 +21,7 @@ public class Task {
     }
 
     public TaskType getType() {
-       return TaskType.TASK;
+        return TaskType.TASK;
     }
 
     public void setStatus(TaskStatus status) {
@@ -52,7 +52,7 @@ public class Task {
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
-        if(obj == null || !obj.getClass().equals(this.getClass()))
+        if (obj == null || !obj.getClass().equals(this.getClass()))
             return false;
         Task task = (Task) obj;
         return Objects.equals(task.name, name) && task.status == status && task.id == id &&

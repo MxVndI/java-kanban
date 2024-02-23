@@ -1,15 +1,14 @@
-package Manager;
+package com.yandex.app.service;
 
-import Logic.*;
+import com.yandex.app.model.*;
 
 
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.Scanner;
 
 public class TaskManager {
 
-    private static int specCode=0;
+    private static int specCode = 0;
     private HashMap<Integer, Task> tasks = new HashMap<>();
     private HashMap<Integer, SubTask> subTasks = new HashMap<>();
     private HashMap<Integer, Epic> epics = new HashMap<>();
@@ -53,13 +52,13 @@ public class TaskManager {
 
     private void printTasks(TaskType type) {
         if (type == TaskType.TASK)
-        for (Task task : tasks.values())
-            System.out.println(task.toString());
+            for (Task task : tasks.values())
+                System.out.println(task.toString());
         else if (type == TaskType.EPIC)
-            for (Epic epic: epics.values())
+            for (Epic epic : epics.values())
                 System.out.println(epic.toString());
         else if (type == TaskType.SUBTASK)
-            for (SubTask subTask: subTasks.values())
+            for (SubTask subTask : subTasks.values())
                 System.out.println(subTask.toString());
     }
 
@@ -67,12 +66,11 @@ public class TaskManager {
         if (type.equals(TaskType.TASK))
             tasks.clear();
         else if (type.equals(TaskType.SUBTASK)) {
-            for (Epic epic: epics.values())
+            for (Epic epic : epics.values())
                 epic.removeSubtasks();
             subTasks.clear();
-        }
-        else if (type.equals(TaskType.EPIC)) {
-            for (Epic epic: epics.values())
+        } else if (type.equals(TaskType.EPIC)) {
+            for (Epic epic : epics.values())
                 epic.removeSubtasks();
             epics.clear();
         }
@@ -84,16 +82,13 @@ public class TaskManager {
         if (type.equals(TaskType.TASK)) {
             System.out.println(tasks.get(code).toString());
             return tasks.get(code);
-        }
-        else if (type.equals(TaskType.SUBTASK)) {
+        } else if (type.equals(TaskType.SUBTASK)) {
             System.out.println(subTasks.get(code).toString());
             return subTasks.get(code);
-        }
-        else if (type.equals(TaskType.EPIC)) {
+        } else if (type.equals(TaskType.EPIC)) {
             System.out.println(epics.get(code).toString());
             return epics.get(code);
-        }
-        else {
+        } else {
             System.out.println("Неверный идентификатор");
             return null;
         }
@@ -104,16 +99,13 @@ public class TaskManager {
         Integer code = Integer.parseInt(scanner.nextLine());
         if (type == TaskType.TASK) {
             tasks.remove(code);
-        }
-        else if (type == TaskType.EPIC) {
+        } else if (type == TaskType.EPIC) {
             epics.get(code).removeSubtasks();
             epics.remove(code);
-        }
-        else if (type == TaskType.SUBTASK)  {
+        } else if (type == TaskType.SUBTASK) {
             epics.get(subTasks.get(code).getId()).removeSubtask(code);
             subTasks.remove(code);
-        }
-        else
+        } else
             System.out.println("Неверно указан тип задачи");
     }
 

@@ -1,4 +1,4 @@
-package Logic;
+package com.yandex.app.model;
 
 import java.util.ArrayList;
 
@@ -57,7 +57,7 @@ public class Epic extends Task {
             status = TaskStatus.NEW;
         else {
             for (SubTask subTask : subTasks)
-                if (subTask.getStatus() != TaskStatus.DONE && subTask.getStatus() != TaskStatus.NEW ) {
+                if (subTask.getStatus() != TaskStatus.DONE && subTask.getStatus() != TaskStatus.NEW) {
                     status = TaskStatus.IN_PROGRESS;
                     return;
                 }
