@@ -6,8 +6,8 @@ public class Epic extends Task {
 
     private ArrayList<SubTask> subTasks;
 
-    public Epic(String description, String name, int id) {
-        super(description, name, id);
+    public Epic(String description, String name) {
+        super(description, name);
         subTasks = new ArrayList<>();
     }
 
@@ -22,8 +22,6 @@ public class Epic extends Task {
     }
 
     public ArrayList<SubTask> getSubTasks() {
-        for (SubTask task : subTasks)
-            System.out.println(task);
         return new ArrayList<>(subTasks);
     }
 
@@ -52,7 +50,7 @@ public class Epic extends Task {
                 '}';
     }
 
-    public void checkStatus() { // оставил public потому что в TaskManager вызывается chestatus после каждого действия
+    private void checkStatus() {
         if (subTasks.isEmpty())
             status = TaskStatus.NEW;
         else {

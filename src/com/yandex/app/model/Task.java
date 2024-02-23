@@ -9,15 +9,18 @@ public class Task {
     protected TaskStatus status;
 
 
-    public Task(String description, String name, int id) {
+    public Task(String description, String name) {
         this.description = description;
         this.name = name;
         status = TaskStatus.NEW;
-        this.id = id;
     }
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public TaskType getType() {
