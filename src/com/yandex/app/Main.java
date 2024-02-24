@@ -59,7 +59,7 @@ public class Main {
                     System.out.println("Введите id главной задачи");
                     int id = Integer.parseInt(scanner.nextLine());
                     SubTask task = new SubTask(description, name, id);
-                    taskManager.addSubtask(task, id);
+                    taskManager.addSubtask(task);
                 }
                 break;
             case "5":
@@ -99,6 +99,7 @@ public class Main {
                     System.out.println("Введите идентификатор эпика");
                     int epicId = Integer.parseInt(scanner.nextLine());
                     if (taskManager.getEpics().containsKey(epicId)) {
+
                         taskManager.addSubtask(epicId, name, description);
                     } else
                         System.out.println("Такой задачи нет");

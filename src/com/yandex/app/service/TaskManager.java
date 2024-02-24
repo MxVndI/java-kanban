@@ -1,6 +1,8 @@
 package com.yandex.app.service;
 
 import com.yandex.app.model.*;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class TaskManager {
@@ -10,43 +12,32 @@ public class TaskManager {
     private HashMap<Integer, SubTask> subTasks = new HashMap<>();
     private HashMap<Integer, Epic> epics = new HashMap<>();
 
-    public void addSubtask(SubTask task, int epicId) {
-        specCode++;
-        task.setId(specCode);
+    public void addSubtask(SubTask task) {
+        task.setId(++specCode);
         subTasks.put(task.getId(), task);
-        epics.get(epicId).addSubTask(task);
-    }
-
-    public void addSubtask(int epicId, String name, String description) {
-        SubTask task = new SubTask(description, name, epicId);
-        addSubtask(task, epicId);
+        epics.get(task.getEpicId()).addSubTask(task);
     }
 
     public void addTask(Task task) {
-        specCode++;
-        task.setId(specCode);
+        task.setId(++specCode);
         tasks.put(task.getId(), task);
     }
 
     public void addEpic(Epic task) {
-        specCode++;
-        task.setId(specCode);
+        task.setId(++specCode);
         epics.put(task.getId(), task);
     }
 
-    public HashMap<Integer, Task> getTasks() {
-        System.out.println(tasks);
-        return tasks;
+    public ArrayList<Task> getTasks() {
+        return new ArrayList<>(tasks.values());
     }
 
-    public HashMap<Integer, Epic> getEpics() {
-        System.out.println(epics);
-        return epics;
+    public ArrayList<Epic> getEpics() {
+        return new ArrayList<>(epics.values());
     }
 
-    public HashMap<Integer, SubTask> getSubTasks() {
-        System.out.println(subTasks);
-        return subTasks;
+    public ArrayList<SubTask> getSubTasks() {
+        return new ArrayList<>(subTasks.values());
     }
 
     public void removeAll(TaskType type) {
@@ -96,7 +87,6 @@ public class TaskManager {
         if (type == TaskType.EPIC)
             System.out.println("Изменить тип задачи невозможно");
         else {
-
             if (type == TaskType.TASK) {
                 tasks.get(code).setStatus(newStatus);
             }
