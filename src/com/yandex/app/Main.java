@@ -35,7 +35,6 @@ public class Main {
                 } else if (type == TaskType.SUBTASK) {
                     System.out.println(taskManager.getSubTasks());
                 }
-
                 break;
             case "2":
                 taskManager.removeAll(type);
