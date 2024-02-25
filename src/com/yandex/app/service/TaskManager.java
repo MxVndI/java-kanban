@@ -74,7 +74,7 @@ public class TaskManager {
         if (tasks.containsKey(id)) {
             tasks.remove(id);
         } else if (epics.containsKey(id)) {
-            for (SubTask subTask: getSubTasksEpic(id))
+            for (SubTask subTask : getSubTasksEpic(id))
                 subTasks.remove(subTask.getId());
             epics.remove(id);
         } else if (subTasks.containsKey(id)) {
@@ -88,16 +88,13 @@ public class TaskManager {
             Epic oldEpic = epics.get(task.getId());
             oldEpic.setName(task.getName());
             oldEpic.setDescription(task.getDescription());
+        } else if (task.getType() == TaskType.TASK) {
+            tasks.replace(task.getId(), task);
+        } else if (task.getType() == TaskType.SUBTASK) {
+            Epic epic = epics.get(((SubTask) task).getEpicId());
+            epic.swapSubTask(subTasks.get(task.getId()), (SubTask) task);
+            subTasks.replace(task.getId(), (SubTask) task);
         }
-        else {
-            if (task.getType() == TaskType.TASK) {
-                tasks.replace(task.getId(), task);
-            }
-            if (task.getType() == TaskType.SUBTASK) {
-                Epic epic = epics.get(((SubTask) task).getEpicId());
-                epic.swapSubTask(subTasks.get(task.getId()), (SubTask) task);
-                subTasks.replace(task.getId(), (SubTask) task);
-            }
-        }
+
     }
 }

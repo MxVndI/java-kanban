@@ -62,6 +62,10 @@ public class Epic extends Task {
                     countNew++;
                 else if (task.getStatus() == TaskStatus.DONE)
                     countDone++;
+                else {
+                    status = TaskStatus.IN_PROGRESS;
+                    return;
+                }
             }
             if (countNew == countSubtasks) {
                 status = TaskStatus.NEW;
@@ -69,13 +73,12 @@ public class Epic extends Task {
             else if (countDone == countSubtasks) {
                 status = TaskStatus.DONE;
             }
-            else
-                status = TaskStatus.IN_PROGRESS;
         }
     }
 
     public void swapSubTask(SubTask oldTask, SubTask newTask) {
         subTasks.remove(oldTask);
         subTasks.add(newTask);
+        checkStatus();
     }
 }
