@@ -48,50 +48,55 @@ public class TaskManager {
                 epic.removeSubtasks();
             subTasks.clear();
         } else if (type.equals(TaskType.EPIC)) {
-            for (Epic epic : epics.values())
-                epic.removeSubtasks();
             subTasks.clear();
             epics.clear();
         }
     }
 
-    public Task printByCode(TaskType type, Integer code) {
-        if (type.equals(TaskType.TASK)) {
-            return tasks.get(code);
-        } else if (type.equals(TaskType.SUBTASK)) {
-            return subTasks.get(code);
-        } else if (type.equals(TaskType.EPIC)) {
-            return epics.get(code);
+    public Task getByCode(Integer id) {
+        if (tasks.containsKey(id)) {
+            return tasks.get(id);
+        } else if (subTasks.containsKey(id)) {
+            return subTasks.get(id);
+        } else if (epics.containsKey(id)) {
+            return epics.get(id);
         } else {
             System.out.println("Неверный идентификатор");
             return null;
         }
     }
 
-    public void removeByCode(TaskType type, Integer id) {
-        if (type == TaskType.TASK) {
+    public ArrayList<SubTask> getSubTasksEpic(Integer id) {
+        return epics.get(id).getSubTasks();
+    }
+
+    public void removeByCode(Integer id) {
+        if (tasks.containsKey(id)) {
             tasks.remove(id);
-        } else if (type == TaskType.EPIC) {
-            epics.get(id).removeSubtasks();
-            for (SubTask subTask: subTasks.values())
-                if (subTask.getEpicId() == id)
-                    subTasks.remove(subTask);
+        } else if (epics.containsKey(id)) {
+            for (SubTask subTask: getSubTasksEpic(id))
+                subTasks.remove(subTask.getId());
             epics.remove(id);
-        } else if (type == TaskType.SUBTASK) {
-            epics.get(subTasks.get(id).getEpicId()).removeSubtask(id);
-            subTasks.remove(id);
+        } else if (subTasks.containsKey(id)) {
+            SubTask subtask = subTasks.remove(id);
+            epics.get(subtask.getEpicId()).removeSubtask(id);
         }
     }
 
-    public void refresh(TaskType type, Integer code, TaskStatus newStatus) {
-        if (type == TaskType.EPIC)
-            System.out.println("Изменить тип задачи невозможно");
+    public void refresh(Task task) {
+        if (task.getType() == TaskType.EPIC) {
+            Epic oldEpic = epics.get(task.getId());
+            oldEpic.setName(task.getName());
+            oldEpic.setDescription(task.getDescription());
+        }
         else {
-            if (type == TaskType.TASK) {
-                tasks.get(code).setStatus(newStatus);
+            if (task.getType() == TaskType.TASK) {
+                tasks.replace(task.getId(), task);
             }
-            if (type == TaskType.SUBTASK) {
-                subTasks.get(code).setStatus(newStatus);
+            if (task.getType() == TaskType.SUBTASK) {
+                Epic epic = epics.get(((SubTask) task).getEpicId());
+                epic.swapSubTask(subTasks.get(task.getId()), (SubTask) task);
+                subTasks.replace(task.getId(), (SubTask) task);
             }
         }
     }

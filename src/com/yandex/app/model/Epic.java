@@ -54,18 +54,28 @@ public class Epic extends Task {
         if (subTasks.isEmpty())
             status = TaskStatus.NEW;
         else {
-            for (SubTask subTask : subTasks) {
-                if (subTask.getStatus() != TaskStatus.DONE) {
-                    if (subTask.getStatus() == TaskStatus.IN_PROGRESS) {
-                        status = TaskStatus.IN_PROGRESS;
-                        return;
-                    }
-
-                } else if (subTask.getStatus() != TaskStatus.NEW)
-                    status = TaskStatus.DONE;
-                else
-                    status = TaskStatus.NEW;
+            int countSubtasks = getSubTasks().size();
+            int countDone = 0;
+            int countNew = 0;
+            for (SubTask task: subTasks) {
+                if (task.getStatus() == TaskStatus.NEW)
+                    countNew++;
+                else if (task.getStatus() == TaskStatus.DONE)
+                    countDone++;
             }
+            if (countNew == countSubtasks) {
+                status = TaskStatus.NEW;
+            }
+            else if (countDone == countSubtasks) {
+                status = TaskStatus.DONE;
+            }
+            else
+                status = TaskStatus.IN_PROGRESS;
         }
+    }
+
+    public void swapSubTask(SubTask oldTask, SubTask newTask) {
+        subTasks.remove(oldTask);
+        subTasks.add(newTask);
     }
 }
