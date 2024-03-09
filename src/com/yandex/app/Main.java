@@ -1,19 +1,22 @@
 package com.yandex.app;
 
 import com.yandex.app.model.*;
-import com.yandex.app.service.TaskManager;
+import com.yandex.app.service.*;
 
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Main {
     private static Scanner scanner = new Scanner(System.in);
-    private static TaskManager taskManager = new TaskManager();
+    private static Managers manager = new Managers();
 
     public static void main(String[] args) {
-        while (menu()) ;
+        TaskManager taskManager = manager.getDefault();
+        HistoryManager historyManager = manager.getDefaultHistory();
+        while (menu(taskManager, (InMemoryHistoryManager) historyManager)) ;
     }
 
-    private static boolean menu() {
+    private static boolean menu(TaskManager taskManager, InMemoryHistoryManager historyManager) {
         TaskType type = choseType();
         System.out.println("Выберите операцию \n" +
                 "1. Получение списка всех задач.\n" +
@@ -24,7 +27,8 @@ public class Main {
                 "6. Удаление по идентификатору. \n" +
                 "7. Получение списка подзадач эпика. \n" +
                 "8. Добавить подзадачу в эпик \n" +
-                "9. Выход из приложения");
+                "9. Получить историю \n" +
+                "10. Выход из приложения");
         String temp = scanner.nextLine();
         switch (temp) {
             case "1":
@@ -42,6 +46,7 @@ public class Main {
             case "3":
                 System.out.println("Введите идентификатор");
                 Integer id = Integer.parseInt(scanner.nextLine());
+                historyManager.add(taskManager.getByCode(id));
                 System.out.println(taskManager.getByCode(id));
                 break;
             case "4":
@@ -128,6 +133,9 @@ public class Main {
                 }
                 break;
             case "9":
+                System.out.println(historyManager.getHistory());
+                break;
+            case "10":
                 return false;
             default:
                 System.out.println("Такой операции нет");
