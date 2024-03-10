@@ -6,6 +6,7 @@ import com.yandex.app.model.Task;
 import com.yandex.app.model.TaskType;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface TaskManager {
     void addSubtask(SubTask task);
@@ -14,20 +15,21 @@ public interface TaskManager {
 
     void addEpic(Epic task);
 
-    ArrayList<Task> getTasks();
+    List<Task> getTasks();
 
-    ArrayList<Epic> getEpics();
+    List<Epic> getEpics();
 
-    ArrayList<SubTask> getSubTasks();
+    List<SubTask> getSubTasks();
 
     void removeAll(TaskType type);
 
     Task getByCode(Integer id);
 
-    ArrayList<SubTask> getSubTasksEpic(Integer id);
+    List<SubTask> getSubTasksEpic(Integer id);
 
     void removeByCode(Integer id);
 
     void refresh(Task task);
 
+    List<Task> getHistory();
 }

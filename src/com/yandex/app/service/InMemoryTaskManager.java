@@ -2,16 +2,15 @@ package com.yandex.app.service;
 
 import com.yandex.app.model.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Queue;
+import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
 
+    HistoryManager historyManager = new InMemoryHistoryManager();
     private int specCode = 0;
-    private HashMap<Integer, Task> tasks = new HashMap<>();
-    private HashMap<Integer, SubTask> subTasks = new HashMap<>();
-    private HashMap<Integer, Epic> epics = new HashMap<>();
+    private Map<Integer, Task> tasks = new HashMap<>();
+    private Map<Integer, SubTask> subTasks = new HashMap<>();
+    private Map<Integer, Epic> epics = new HashMap<>();
 
     @Override
     public void addSubtask(SubTask task) {
@@ -33,17 +32,17 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public ArrayList<Task> getTasks() {
+    public List<Task> getTasks() {
         return new ArrayList<>(tasks.values());
     }
 
     @Override
-    public ArrayList<Epic> getEpics() {
+    public List<Epic> getEpics() {
         return new ArrayList<>(epics.values());
     }
 
     @Override
-    public ArrayList<SubTask> getSubTasks() {
+    public List<SubTask> getSubTasks() {
         return new ArrayList<>(subTasks.values());
     }
 
@@ -64,10 +63,13 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task getByCode(Integer id) {
         if (tasks.containsKey(id)) {
+            historyManager.add(tasks.get(id));
             return tasks.get(id);
         } else if (subTasks.containsKey(id)) {
+            historyManager.add(tasks.get(id));
             return subTasks.get(id);
         } else if (epics.containsKey(id)) {
+            historyManager.add(tasks.get(id));
             return epics.get(id);
         } else {
             System.out.println("Неверный идентификатор");
@@ -76,7 +78,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public ArrayList<SubTask> getSubTasksEpic(Integer id) {
+    public List<SubTask> getSubTasksEpic(Integer id) {
         return epics.get(id).getSubTasks();
     }
 
@@ -109,4 +111,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
+    public List<Task> getHistory() {
+        return historyManager.getHistory();
+    }
 }

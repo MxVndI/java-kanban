@@ -26,11 +26,4 @@ public class SubTask extends Task {
                 ", epicId=" + epicId +
                 '}';
     }
-
-   /* @Override
-    public void setStatus() {
-
-    }
-
-    */
 }

@@ -1,14 +1,15 @@
 package com.yandex.app.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Epic extends Task {
 
-    private ArrayList<SubTask> subTasks;
+    private List<SubTask> subTasks;
 
     public Epic(String description, String name) {
         super(description, name);
-        subTasks = new ArrayList<>();
+        subTasks = new ArrayList<SubTask>();
     }
 
     @Override
@@ -57,7 +58,7 @@ public class Epic extends Task {
             int countSubtasks = getSubTasks().size();
             int countDone = 0;
             int countNew = 0;
-            for (SubTask task: subTasks) {
+            for (SubTask task : subTasks) {
                 if (task.getStatus() == TaskStatus.NEW)
                     countNew++;
                 else if (task.getStatus() == TaskStatus.DONE)
@@ -69,10 +70,9 @@ public class Epic extends Task {
             }
             if (countNew == countSubtasks) {
                 status = TaskStatus.NEW;
-            }
-            else if (countDone == countSubtasks) {
+            } else if (countDone == countSubtasks) {
                 status = TaskStatus.DONE;
-            }
+            } else status = TaskStatus.IN_PROGRESS;
         }
     }
 

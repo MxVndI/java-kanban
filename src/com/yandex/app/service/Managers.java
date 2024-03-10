@@ -2,7 +2,11 @@ package com.yandex.app.service;
 
 public class Managers {
 
-    public TaskManager getDefault() {
+    private Managers() {
+
+    }
+
+    public static TaskManager getDefault() {
         return new InMemoryTaskManager();
     }
 

@@ -8,15 +8,13 @@ import java.util.Scanner;
 
 public class Main {
     private static Scanner scanner = new Scanner(System.in);
-    private static Managers manager = new Managers();
 
     public static void main(String[] args) {
-        TaskManager taskManager = manager.getDefault();
-        HistoryManager historyManager = manager.getDefaultHistory();
-        while (menu(taskManager, (InMemoryHistoryManager) historyManager)) ;
+        TaskManager taskManager = Managers.getDefault();
+        while (menu(taskManager)) ;
     }
 
-    private static boolean menu(TaskManager taskManager, InMemoryHistoryManager historyManager) {
+    private static boolean menu(TaskManager taskManager) {
         TaskType type = choseType();
         System.out.println("Выберите операцию \n" +
                 "1. Получение списка всех задач.\n" +
@@ -46,7 +44,6 @@ public class Main {
             case "3":
                 System.out.println("Введите идентификатор");
                 Integer id = Integer.parseInt(scanner.nextLine());
-                historyManager.add(taskManager.getByCode(id));
                 System.out.println(taskManager.getByCode(id));
                 break;
             case "4":
@@ -133,7 +130,7 @@ public class Main {
                 }
                 break;
             case "9":
-                System.out.println(historyManager.getHistory());
+                System.out.println(taskManager.getHistory());
                 break;
             case "10":
                 return false;
