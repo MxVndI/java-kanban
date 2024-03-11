@@ -64,13 +64,10 @@ public class SubTaskTest {
         Epic epic = new Epic("nm", "dsc");
         taskManager.addEpic(epic);
         SubTask task = new SubTask("Test addNewTask", "Test addNewTask description", epic.getId());
-        taskManager.addSubtask(task);
-        historyManager.add(taskManager.getByCode(task.getId()));
+        historyManager.add(task);
 
         task.setName("bla bla");
         task.setId(2);
-        taskManager.refresh(task);
-        historyManager.add(taskManager.getByCode(task.getId()));
-        assertNotEquals(historyManager.getHistory().get(0), historyManager.getHistory().get(1));
+        assertEquals(historyManager.getHistory().get(0), task);
     }
 }

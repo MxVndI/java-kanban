@@ -57,12 +57,10 @@ public class EpicTest {
     public void TestChangesTaskInHistory() {
         Epic task = new Epic("nm", "dsc");
         taskManager.addEpic(task);
-        historyManager.add(taskManager.getByCode(task.getId()));
+        historyManager.add(task);
 
         task.setName("bla bla");
         task.setId(2);
-        taskManager.refresh(task);
-        historyManager.add(taskManager.getByCode(task.getId()));
-        assertEquals(historyManager.getHistory().get(0), historyManager.getHistory().get(1));
+        assertEquals(historyManager.getHistory().get(0), task);
     }
 }

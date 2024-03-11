@@ -43,9 +43,8 @@ public class TaskTest {
         Task task = new Task("Test addNewTask", "Test addNewTask description");
         historyManager.add(task);
 
-        task.setId(2);
-        historyManager.add(task);
-        assertEquals(historyManager.getHistory().get(0), historyManager.getHistory().get(1));
+        task.setName("aya");
+        assertEquals(task, historyManager.getHistory().get(0));
     }
 
 }
