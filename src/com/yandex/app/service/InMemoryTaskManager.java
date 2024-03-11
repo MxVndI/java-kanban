@@ -6,7 +6,7 @@ import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
 
-    HistoryManager historyManager = new InMemoryHistoryManager();
+    HistoryManager historyManager = Managers.getDefaultHistory();
     private int specCode = 0;
     private Map<Integer, Task> tasks = new HashMap<>();
     private Map<Integer, SubTask> subTasks = new HashMap<>();
@@ -61,20 +61,16 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Task getByCode(Integer id) {
-        if (tasks.containsKey(id)) {
-            historyManager.add(tasks.get(id));
-            return tasks.get(id);
-        } else if (subTasks.containsKey(id)) {
-            historyManager.add(tasks.get(id));
-            return subTasks.get(id);
-        } else if (epics.containsKey(id)) {
-            historyManager.add(tasks.get(id));
-            return epics.get(id);
-        } else {
-            System.out.println("Неверный идентификатор");
-            return null;
+    public Task getByCode(Integer id) { // хитро))
+        Task task = tasks.get(id);
+        if (task != null) {
+            historyManager.add(task);
+        } else if ((task = subTasks.get(id)) != null) {
+            historyManager.add(task);
+        } else if ((task = epics.get(id)) != null) {
+            historyManager.add(task);
         }
+        return task;
     }
 
     @Override

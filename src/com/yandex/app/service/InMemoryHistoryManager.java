@@ -8,7 +8,7 @@ import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
     private final static int MAX_COUNT_ELEMENTS = 10;
-    private LinkedList<Task> history = new LinkedList<>();
+    private final LinkedList<Task> history = new LinkedList<>();
 
     public void add(Task task) {
         if (history.size() >= MAX_COUNT_ELEMENTS)
