@@ -1,3 +1,5 @@
+package com.yandex.app.test;
+
 import com.yandex.app.model.Epic;
 import com.yandex.app.model.SubTask;
 import com.yandex.app.model.Task;
@@ -12,12 +14,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class InMemoryTaskManagerTest {
 
     static InMemoryTaskManager taskManager;
-    static InMemoryHistoryManager historyManager;
 
     @BeforeAll
     public static void createManager() {
         taskManager = (InMemoryTaskManager) Managers.getDefault();
-        historyManager = (InMemoryHistoryManager) Managers.getDefaultHistory();
     }
 
     @Test
