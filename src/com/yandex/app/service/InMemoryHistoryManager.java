@@ -41,7 +41,7 @@ public class InMemoryHistoryManager implements HistoryManager {
                 tail = node;
             }
             size++;
-            removeNode(node);
+            removeNodeCopies(node);
         }
 
         private List<Task> getTasks() {
@@ -59,11 +59,10 @@ public class InMemoryHistoryManager implements HistoryManager {
             }
         }
 
-        private void removeNode(Node<T> node) {
+        private void removeNodeCopies(Node<T> node) {
             int countNodes = 0;
             Node<T> temp = head;
             while (temp != null) {
-                System.out.println(temp.data.getName() + "gfddsfdsfds");
                 if (node.data.equals(temp.data)) {
                     countNodes++;
                 }
@@ -83,6 +82,25 @@ public class InMemoryHistoryManager implements HistoryManager {
                 temp = temp.next;
             }
         }
+
+        private void removeNode(Node<T> node) {
+            Node<T> temp = head;
+            while (temp != null) {
+                if (node.data.equals(temp.data)) {
+                    if (node.data.equals(head.data)) {
+                        head = head.next;
+                    } else if (node.data.equals(tail.data)) {
+                        tail.prev.next = null;
+                        tail = tail.prev;
+                    } else {
+                        temp.prev.next = temp.next;
+                        temp.next.prev = temp.prev;
+                    }
+                }
+                temp = temp.next;
+            }
+        }
     }
 }
+
 

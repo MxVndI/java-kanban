@@ -44,7 +44,6 @@ public class TaskTest {
     public void TestChangesTaskInHistory() {
         Task task = new Task("Test addNewTask", "Test addNewTask description");
         historyManager.add(task);
-
         task.setName("aya");
         assertEquals(task, historyManager.getHistory().get(0));
     }
