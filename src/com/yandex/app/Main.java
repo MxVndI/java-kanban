@@ -3,7 +3,6 @@ package com.yandex.app;
 import com.yandex.app.model.*;
 import com.yandex.app.service.*;
 
-import java.util.Objects;
 import java.util.Scanner;
 
 public class Main {
