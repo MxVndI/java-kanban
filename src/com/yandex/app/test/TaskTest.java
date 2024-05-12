@@ -20,7 +20,7 @@ public class TaskTest {
     }
 
     @Test //проверка по ID
-    public void TestTaskIdEquals() {
+    public void testTaskIdEquals() {
         Task task = new Task("Test addNewTask", "Test addNewTask description");
         taskManager.addTask(task);
         final int taskID = task.getId();
@@ -29,7 +29,7 @@ public class TaskTest {
     }
 
     @Test
-    public void TestTaskFieldsEquals() {
+    public void testTaskFieldsEquals() {
         Task task = new Task("Test addNewTask", "Test addNewTask description");
         taskManager.addTask(task);
         assertEquals(task.getName(), taskManager.getByCode(task.getId()).getName());
@@ -40,7 +40,7 @@ public class TaskTest {
     }
 
     @Test
-    public void TestChangesTaskInHistory() {
+    public void testChangesTaskInHistory() {
         Task task = new Task("Test addNewTask", "Test addNewTask description");
         historyManager.add(task);
         task.setName("aya");

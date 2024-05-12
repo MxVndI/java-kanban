@@ -20,7 +20,7 @@ public class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void CreateDifferentTasks() {
+    public void createDifferentTasks() {
         Task task = new Task("Test addNewTask", "Test addNewTask description");
         taskManager.addTask(task);
         Epic epic = new Epic("epic", "desc");

@@ -21,7 +21,7 @@ public class EpicTest {
     }
 
     @Test
-    public void TestEpicEquals() {
+    public void testEpicEquals() {
         Epic task = new Epic("epic", "desc");
         taskManager.addEpic(task);
         final int taskID = task.getId();
@@ -42,7 +42,7 @@ public class EpicTest {
     */
 
     @Test
-    public void TestEPicFieldsEquals() {
+    public void testEPicFieldsEquals() {
         Epic task = new Epic("Test addNewTask", "Test addNewTask description");
         taskManager.addTask(task);
         assertEquals(task.getName(), taskManager.getByCode(task.getId()).getName());
@@ -54,7 +54,7 @@ public class EpicTest {
 
     //тут проблемки(
     @Test
-    public void TestChangesTaskInHistory() {
+    public void testChangesTaskInHistory() {
         Epic task = new Epic("nm", "dsc");
         taskManager.addEpic(task);
         historyManager.add(task);

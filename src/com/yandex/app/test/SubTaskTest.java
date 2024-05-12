@@ -22,7 +22,7 @@ public class SubTaskTest {
     }
 
     @Test
-    public void TestSubTaskEquals() {
+    public void testSubTaskEquals() {
         Epic epic = new Epic("epic", "desc");
         taskManager.addEpic(epic);
         SubTask task = new SubTask("Test addNewTask", "Test addNewTask description", epic.getId());
@@ -49,7 +49,7 @@ public class SubTaskTest {
     */
 
     @Test
-    public void TestSubTaskFieldsEquals() {
+    public void testSubTaskFieldsEquals() {
         Epic epic = new Epic("fds", "f");
         SubTask task = new SubTask("Test addNewTask", "Test addNewTask description", epic.getId());
         taskManager.addTask(task);
@@ -61,7 +61,7 @@ public class SubTaskTest {
     }
 
     @Test
-    public void TestChangesTaskInHistory() {
+    public void testChangesTaskInHistory() {
         Epic epic = new Epic("nm", "dsc");
         taskManager.addEpic(epic);
         SubTask task = new SubTask("Test addNewTask", "Test addNewTask description", epic.getId());

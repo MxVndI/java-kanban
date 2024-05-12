@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class ManagersTest {
     @Test
-    public void TestManagers() {
+    public void testManagers() {
         assertNotNull(Managers.getDefault());
         assertNotNull(Managers.getDefault());
         assertNotNull(Managers.getDefaultHistory());

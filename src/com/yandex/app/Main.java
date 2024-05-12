@@ -101,7 +101,7 @@ public class Main {
             case "6":
                 System.out.println("Введите идентификатор");
                 id = Integer.parseInt(scanner.nextLine());
-                taskManager.removeByCode(id);
+                taskManager.remove(id);
                 break;
             case "7":
                 if (type == TaskType.EPIC) {
