@@ -5,7 +5,6 @@ import com.yandex.app.model.SubTask;
 import com.yandex.app.model.Task;
 import com.yandex.app.model.TaskType;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public interface TaskManager {

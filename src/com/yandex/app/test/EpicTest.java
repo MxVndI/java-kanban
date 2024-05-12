@@ -1,7 +1,6 @@
 package com.yandex.app.test;
 
 import com.yandex.app.model.Epic;
-import com.yandex.app.model.SubTask;
 import com.yandex.app.model.Task;
 import com.yandex.app.service.InMemoryHistoryManager;
 import com.yandex.app.service.InMemoryTaskManager;
@@ -10,7 +9,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class EpicTest {
     static InMemoryTaskManager taskManager;
