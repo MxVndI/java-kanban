@@ -27,9 +27,10 @@ public interface TaskManager {
 
     List<SubTask> getSubTasksEpic(Integer id);
 
-    void removeByCode(Integer id);
+    void remove(Integer id);  //У этого метода было просто другое название
 
     void refresh(Task task);
 
     List<Task> getHistory();
+
 }
