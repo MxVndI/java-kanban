@@ -3,19 +3,15 @@ package test;
 import com.yandex.app.model.Epic;
 import com.yandex.app.model.Task;
 import com.yandex.app.service.FileBackedTaskManager;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class FileBackedTasksManagerTest {
+class FileBackedTaskManagerTest {
     File file = new File("test/data.test.csv");
     FileBackedTaskManager manager;
 
@@ -30,7 +26,6 @@ class FileBackedTasksManagerTest {
         manager.addTask(task);
         Epic epic = new Epic("Description", "Title");
         manager.addEpic(epic);
-        //manager
         FileBackedTaskManager secondManager = new FileBackedTaskManager(file);
         secondManager.loadFromFile(file);
         assertEquals(manager.getTasks(), secondManager.getTasks());
