@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import com.yandex.app.service.FileBackedTaskManager;
 
 class FileBackedTaskManagerTest {
     File file = new File("test/data.test.csv");
