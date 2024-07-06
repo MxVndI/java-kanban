@@ -1,16 +1,23 @@
 package com.yandex.app.service;
 
-import com.yandex.app.model.*;
+import com.yandex.app.model.SubTask;
+import com.yandex.app.model.Epic;
+import com.yandex.app.model.Task;
+import com.yandex.app.model.TaskType;
+import com.yandex.app.model.TaskStatus;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.BufferedReader;
 
-public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
+public class FileBackedTaskManager extends InMemoryTaskManager {
     private File file;
 
     private static final String HEADER_FILE = "id,type,name,status,description,epic \n";
 
     public FileBackedTaskManager(File file) {
-        super();
         this.file = file;
     }
 
@@ -78,18 +85,18 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
 
     private Task fromStringTask(String value) {
         String[] data = value.split(",");
-        switch (data[1]) {
-            case "TASK":
+        switch (TaskType.valueOf(data[1])) {
+            case TASK:
                 Task task = new Task(data[2], data[4]);
                 task.setId(Integer.parseInt(data[0]));
                 task.setStatus(TaskStatus.valueOf(data[3]));
                 return task;
-            case "EPIC":
+            case EPIC:
                 Epic epic = new Epic(data[2], data[4]);
                 epic.setId(Integer.parseInt(data[0]));
                 epic.setStatus(TaskStatus.valueOf(data[3]));
                 return epic;
-            case "SUBTASK":
+            case SUBTASK:
                 SubTask subTask = new SubTask(data[2], data[4], Integer.parseInt(data[5]));
                 subTask.setId(Integer.parseInt(data[0]));
                 subTask.setStatus(TaskStatus.valueOf(data[3]));
@@ -98,18 +105,19 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         return null;
     }
 
-    public void loadFromFile(File file) {
+    public static void loadFromFile(File file) {
+        FileBackedTaskManager f = new FileBackedTaskManager(file);
         try (FileReader fr = new FileReader(file); BufferedReader br = new BufferedReader(fr)) {
             br.readLine(); // удаляем первую строку с описанием параметров в файле
             while (br.ready()) {
                 String line = br.readLine();
-                Task task = fromStringTask(line);
+                Task task = f.fromStringTask(line);
                 if (task instanceof Epic epic) {
-                    addEpic(epic);
+                    f.addEpic(epic);
                 } else if (task instanceof SubTask subtask) {
-                    addSubtask(subtask);
+                    f.addSubtask(subtask);
                 } else {
-                    addTask(task);
+                    f.addTask(task);
                 }
             }
         } catch (IOException e) {
