@@ -92,7 +92,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 task.setStatus(TaskStatus.valueOf(data[3]));
                 return task;
             case EPIC:
-                Epic epic = new Epic(data[2], data[4]);
+                Epic epic = new Epic(data[4], data[2]);
                 epic.setId(Integer.parseInt(data[0]));
                 epic.setStatus(TaskStatus.valueOf(data[3]));
                 return epic;
@@ -105,19 +105,19 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         return null;
     }
 
-    public static void loadFromFile(File file) {
-        FileBackedTaskManager f = new FileBackedTaskManager(file);
+    public void loadFromFile(File file) {
+        //FileBackedTaskManager f = new FileBackedTaskManager(file);
         try (FileReader fr = new FileReader(file); BufferedReader br = new BufferedReader(fr)) {
-            br.readLine(); // удаляем первую строку с описанием параметров в файле
+            br.readLine();
             while (br.ready()) {
                 String line = br.readLine();
-                Task task = f.fromStringTask(line);
+                Task task = fromStringTask(line);
                 if (task instanceof Epic epic) {
-                    f.addEpic(epic);
+                    addEpic(epic);
                 } else if (task instanceof SubTask subtask) {
-                    f.addSubtask(subtask);
+                    addSubtask(subtask);
                 } else {
-                    f.addTask(task);
+                    addTask(task);
                 }
             }
         } catch (IOException e) {

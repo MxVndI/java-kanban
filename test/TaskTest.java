@@ -19,7 +19,7 @@ public class TaskTest {
         historyManager = (InMemoryHistoryManager) Managers.getDefaultHistory();
     }
 
-    @Test //проверка по ID
+    @Test
     public void testTaskIdEquals() {
         Task task = new Task("Test addNewTask", "Test addNewTask description");
         taskManager.addTask(task);

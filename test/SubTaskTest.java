@@ -23,7 +23,7 @@ public class SubTaskTest {
 
     @Test
     public void testSubTaskEquals() {
-        Epic epic = new Epic("epic", "desc");
+        Epic epic = new Epic("epic", "AAAA");
         taskManager.addEpic(epic);
         SubTask task = new SubTask("Test addNewTask", "Test addNewTask description", epic.getId());
         taskManager.addSubtask(task);
