@@ -21,3 +21,9 @@ F
 test/ManagersTest.java,e\3\e3faebb626bd784923f8a0d8fab606eab227b482
 Q
 !test/InMemoryTaskManagerTest.java,f\5\f5a029b4aaf1fe7c0abe0d5a823fa4ab223ac09a
+X
+(src/com/yandex/app/service/Managers.java,2\0\2003651fe59b3dc448ce4e4da2277d87ec13df69
+?
+java-kanban.iml,d\f\df5dcbbd3f931c7c23855ccec11732ab4c8544f2
+B
+test/TaskTest.java,f\0\f063c4f794dcabfdee02c7c765ec9118866621a6

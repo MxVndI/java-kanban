@@ -24,8 +24,7 @@ public class FileBackedTaskManagerTest {
         manager.addTask(task);
         Epic epic = new Epic("desc", "Aaaa");
         manager.addEpic(epic);
-        FileBackedTaskManager secondManager = new FileBackedTaskManager(file);
-        secondManager.loadFromFile(file);
+        FileBackedTaskManager secondManager = FileBackedTaskManager.loadFromFile(file);
         assertEquals(manager.getTasks().toString(), secondManager.getTasks().toString());
         assertEquals(manager.getEpics().toString(), secondManager.getEpics().toString());
     }

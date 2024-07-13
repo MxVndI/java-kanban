@@ -21,7 +21,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         this.file = file;
     }
 
-    public void save() {
+    private void save() {
         try (FileWriter fw = new FileWriter(file)) {
             fw.write(HEADER_FILE);
             for (Task task : getTasks()) {
@@ -105,23 +105,45 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         return null;
     }
 
-    public void loadFromFile(File file) {
-        //FileBackedTaskManager f = new FileBackedTaskManager(file);
+    public static FileBackedTaskManager loadFromFile(File file) {
+        FileBackedTaskManager f = new FileBackedTaskManager(file);
         try (FileReader fr = new FileReader(file); BufferedReader br = new BufferedReader(fr)) {
             br.readLine();
             while (br.ready()) {
                 String line = br.readLine();
-                Task task = fromStringTask(line);
+                Task task = f.fromStringTask(line);
                 if (task instanceof Epic epic) {
-                    addEpic(epic);
+                    f.addEpic(epic);
                 } else if (task instanceof SubTask subtask) {
-                    addSubtask(subtask);
+                    f.addSubtask(subtask);
                 } else {
-                    addTask(task);
+                    f.addTask(task);
                 }
             }
         } catch (IOException e) {
             throw new ManagerSaveException("Не удалось считать данные из файла.");
         }
+        return f;
+    }
+
+    @Override
+    public void refresh(Task task) {
+        FileBackedTaskManager f = new FileBackedTaskManager(file);
+        if (task.getType() == TaskType.EPIC) {
+            Epic oldEpic = (Epic)f.getByCode(task.getId());
+            oldEpic.setName(task.getName());
+            oldEpic.setDescription(task.getDescription());
+        } else if (task.getType() == TaskType.TASK) {
+            Task oldTask = f.getByCode(task.getId());
+            oldTask.setName(task.getName());
+            oldTask.setDescription(task.getDescription());
+        } else if (task.getType() == TaskType.SUBTASK) {
+            Epic epic = (Epic)f.getByCode(((SubTask) task).getEpicId());
+            epic.swapSubTask((SubTask)getByCode(task.getId()), (SubTask) task);
+            SubTask oldSubTask = (SubTask) f.getByCode(task.getId());
+            oldSubTask.setName(task.getName());
+            oldSubTask.setDescription(task.getDescription());
+        }
+        save();
     }
 }
