@@ -1,9 +1,8 @@
-package com.yandex.app.test;
+package test;
 
 import com.yandex.app.model.Epic;
 import com.yandex.app.model.SubTask;
 import com.yandex.app.model.Task;
-import com.yandex.app.service.InMemoryHistoryManager;
 import com.yandex.app.service.InMemoryTaskManager;
 import com.yandex.app.service.Managers;
 import org.junit.jupiter.api.BeforeAll;
@@ -21,7 +20,7 @@ public class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void CreateDifferentTasks() {
+    public void createDifferentTasks() {
         Task task = new Task("Test addNewTask", "Test addNewTask description");
         taskManager.addTask(task);
         Epic epic = new Epic("epic", "desc");

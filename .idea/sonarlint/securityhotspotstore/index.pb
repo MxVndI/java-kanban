@@ -1,7 +1,29 @@
 
 9
 	README.md,8\e\8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
+R
+"src/com/yandex/app/model/Epic.java,9\7\970c421f5e50014b19232a64767410ea38273248
+^
+.src/com/yandex/app/service/HistoryManager.java,a\4\a4c277158aa9f7dd8a6709137b74a463774f9fee
+O
+.github/workflows/api-tests.yml,8\5\85fa0541a58069946f71da1c414786e4fc2a8ca9
 U
-%src/com/yandex/app/test/EpicTest.java,f\0\f0e692bcfd0c7fc04257a5b3b0592c1f9acd08ff
-g
-7src/com/yandex/app/test/InMemoryHistoryManagerTest.java,9\7\974f0dc4eaae50adf5b297a9ca26bc235cbeb01b
+%src/com/yandex/app/model/SubTask.java,f\8\f8464fe79d4a3c8d16cd0850ca0aaae52fb354a5
+R
+"src/com/yandex/app/model/Task.java,4\7\4783a21bf08321ffe4ebb260c431546fbe9fe512
+X
+(src/com/yandex/app/model/TaskStatus.java,2\c\2c30b239a5479bdfc4b100e8b80c8830dfed5e0a
+V
+&src/com/yandex/app/model/TaskType.java,2\d\2d1eb785f3162885a03792c3080a9644d6cce494
+f
+6src/com/yandex/app/service/InMemoryHistoryManager.java,8\5\85c6b51b71e4589801abd1707e36c3d830a81027
+F
+test/ManagersTest.java,e\3\e3faebb626bd784923f8a0d8fab606eab227b482
+Q
+!test/InMemoryTaskManagerTest.java,f\5\f5a029b4aaf1fe7c0abe0d5a823fa4ab223ac09a
+X
+(src/com/yandex/app/service/Managers.java,2\0\2003651fe59b3dc448ce4e4da2277d87ec13df69
+B
+test/TaskTest.java,f\0\f063c4f794dcabfdee02c7c765ec9118866621a6
+?
+java-kanban.iml,d\f\df5dcbbd3f931c7c23855ccec11732ab4c8544f2

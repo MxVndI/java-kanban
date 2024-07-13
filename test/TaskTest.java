@@ -1,4 +1,4 @@
-package com.yandex.app.test;
+package test;
 
 import com.yandex.app.model.Task;
 import com.yandex.app.service.InMemoryHistoryManager;
@@ -8,7 +8,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class TaskTest {
     static InMemoryTaskManager taskManager;
@@ -20,8 +19,8 @@ public class TaskTest {
         historyManager = (InMemoryHistoryManager) Managers.getDefaultHistory();
     }
 
-    @Test //проверка по ID
-    public void TestTaskIdEquals() {
+    @Test
+    public void testTaskIdEquals() {
         Task task = new Task("Test addNewTask", "Test addNewTask description");
         taskManager.addTask(task);
         final int taskID = task.getId();
@@ -30,7 +29,7 @@ public class TaskTest {
     }
 
     @Test
-    public void TestTaskFieldsEquals() {
+    public void testTaskFieldsEquals() {
         Task task = new Task("Test addNewTask", "Test addNewTask description");
         taskManager.addTask(task);
         assertEquals(task.getName(), taskManager.getByCode(task.getId()).getName());
@@ -41,10 +40,9 @@ public class TaskTest {
     }
 
     @Test
-    public void TestChangesTaskInHistory() {
+    public void testChangesTaskInHistory() {
         Task task = new Task("Test addNewTask", "Test addNewTask description");
         historyManager.add(task);
-
         task.setName("aya");
         assertEquals(task, historyManager.getHistory().get(0));
     }

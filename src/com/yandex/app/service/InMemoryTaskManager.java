@@ -49,19 +49,19 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void removeAll(TaskType type) {
         if (type.equals(TaskType.TASK)) {
-            for (Integer taskID: tasks.keySet())
+            for (Integer taskID : tasks.keySet())
                 historyManager.remove(taskID);
             tasks.clear();
         } else if (type.equals(TaskType.SUBTASK)) {
             for (Epic epic : epics.values())
                 epic.removeSubtasks();
-            for (Integer taskID: subTasks.keySet())
+            for (Integer taskID : subTasks.keySet())
                 historyManager.remove(taskID);
             subTasks.clear();
         } else if (type.equals(TaskType.EPIC)) {
-            for (Integer taskID: subTasks.keySet())
+            for (Integer taskID : subTasks.keySet())
                 historyManager.remove(taskID);
-            for (Integer taskID: epics.keySet())
+            for (Integer taskID : epics.keySet())
                 historyManager.remove(taskID);
             subTasks.clear();
             epics.clear();
@@ -87,7 +87,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void removeByCode(Integer id) {
+    public void remove(Integer id) {  // вот его реализация
         if (tasks.containsKey(id)) {
             tasks.remove(id);
         } else if (epics.containsKey(id)) {
