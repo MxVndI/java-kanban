@@ -2,7 +2,6 @@ package com.yandex.app;
 
 import com.yandex.app.model.*;
 import com.yandex.app.service.*;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
