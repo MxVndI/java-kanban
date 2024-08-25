@@ -1,4 +1,4 @@
-package com.yandex.app.service;
+package com.yandex.app.exception;
 
 import java.io.IOException;
 

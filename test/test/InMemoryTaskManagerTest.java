@@ -8,6 +8,8 @@ import com.yandex.app.service.Managers;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class InMemoryTaskManagerTest {
@@ -21,11 +23,11 @@ public class InMemoryTaskManagerTest {
 
     @Test
     public void createDifferentTasks() {
-        Task task = new Task("Test addNewTask", "Test addNewTask description");
+        Task task = new Task("Test addNewTask", "Test addNewTask description", LocalDateTime.now(), 10);
         taskManager.addTask(task);
-        Epic epic = new Epic("epic", "desc");
+        Epic epic = new Epic("epic", "desc", LocalDateTime.now(), 10);
         taskManager.addEpic(epic);
-        SubTask subTask = new SubTask("gf", "hghg", epic.getId());
+        SubTask subTask = new SubTask("gf", "hghg", epic.getId(), LocalDateTime.now(), 10);
         taskManager.addTask(subTask);
 
         assertNotNull(taskManager.getTasks());

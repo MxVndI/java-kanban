@@ -1,5 +1,6 @@
 package com.yandex.app.service;
 
+import com.yandex.app.exception.ManagerSaveException;
 import com.yandex.app.model.SubTask;
 import com.yandex.app.model.Epic;
 import com.yandex.app.model.Task;
@@ -11,11 +12,13 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.BufferedReader;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
     private File file;
-
-    private static final String HEADER_FILE = "id,type,name,status,description,epic \n";
+    private static final String HEADER_FILE = "id,type,name,status,description,epic,startTime,duration \n";
+    private String datePattern = "yyyy-MM-dd'T'HH:mm:ss";
 
     public FileBackedTaskManager(File file) {
         this.file = file;
@@ -70,34 +73,35 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private String toString(Task task) {
         return task.getId() + "," + task.getType() + "," + task.getName() + "," + task.getStatus() + "," +
-                task.getDescription() + ",\n";
+                task.getDescription() + "," + task.getStartTime() + "," + task.getDuration() + ",\n";
     }
 
     private String toString(Epic task) {
         return task.getId() + "," + task.getType() + "," + task.getName() + "," + task.getStatus() + "," +
-                task.getDescription() + ",\n";
+                task.getDescription() + "," + task.getStartTime() + "," + task.getDuration() + ",\n";
     }
 
     private String toString(SubTask task) {
         return task.getId() + "," + task.getType() + "," + task.getName() + "," + task.getStatus() + "," +
-                task.getDescription() + "," + task.getEpicId() + "\n";
+                task.getDescription() + "," + task.getEpicId() + "," + task.getStartTime() + "," + task.getDuration() + "\n";
     }
 
     private Task fromStringTask(String value) {
         String[] data = value.split(",");
+        LocalDateTime dt = LocalDateTime.parse(data[5], DateTimeFormatter.ofPattern(datePattern));
         switch (TaskType.valueOf(data[1])) {
             case TASK:
-                Task task = new Task(data[2], data[4]);
+                Task task = new Task(data[2], data[4], dt, Integer.parseInt(data[6]));
                 task.setId(Integer.parseInt(data[0]));
                 task.setStatus(TaskStatus.valueOf(data[3]));
                 return task;
             case EPIC:
-                Epic epic = new Epic(data[4], data[2]);
+                Epic epic = new Epic(data[4], data[2], dt,Integer.parseInt(data[6]));
                 epic.setId(Integer.parseInt(data[0]));
                 epic.setStatus(TaskStatus.valueOf(data[3]));
                 return epic;
             case SUBTASK:
-                SubTask subTask = new SubTask(data[2], data[4], Integer.parseInt(data[5]));
+                SubTask subTask = new SubTask(data[2], data[4], Integer.parseInt(data[5]),dt ,Integer.parseInt(data[7]));
                 subTask.setId(Integer.parseInt(data[0]));
                 subTask.setStatus(TaskStatus.valueOf(data[3]));
                 return subTask;

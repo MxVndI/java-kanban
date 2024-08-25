@@ -8,6 +8,8 @@ import com.yandex.app.service.Managers;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class EpicTest {
@@ -22,7 +24,7 @@ public class EpicTest {
 
     @Test
     public void testEpicEquals() {
-        Epic task = new Epic("epic", "desc");
+        Epic task = new Epic("epic", "desc",LocalDateTime.now(), 10);
         taskManager.addEpic(task);
         final int taskID = task.getId();
         final Task savedTask = taskManager.getByCode(taskID);
@@ -43,7 +45,7 @@ public class EpicTest {
 
     @Test
     public void testEPicFieldsEquals() {
-        Epic task = new Epic("Test addNewTask", "Test addNewTask description");
+        Epic task = new Epic("Test addNewTask", "Test addNewTask description", LocalDateTime.now(), 10);
         taskManager.addTask(task);
         assertEquals(task.getName(), taskManager.getByCode(task.getId()).getName());
         assertEquals(task.getDescription(), taskManager.getByCode(task.getId()).getDescription());
@@ -55,7 +57,7 @@ public class EpicTest {
     //тут проблемки(
     @Test
     public void testChangesTaskInHistory() {
-        Epic task = new Epic("nm", "dsc");
+        Epic task = new Epic("nm", "dsc", LocalDateTime.now(), 10);
         taskManager.addEpic(task);
         historyManager.add(task);
 

@@ -3,11 +3,14 @@ package com.yandex.app;
 import com.yandex.app.model.*;
 import com.yandex.app.service.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class Main {
+    // Можете дальше пропустить пожалуйста, постараюсь исправить на следующем финальном все
     private static Scanner scanner = new Scanner(System.in);
-
+    private final static String DATE_PATTERN = "yyyy-MM-dd'T'HH:mm:ss";
     public static void main(String[] args) {
         TaskManager taskManager = Managers.getDefault();
         while (menu(taskManager)) ;
@@ -50,16 +53,19 @@ public class Main {
                 String name = scanner.nextLine();
                 System.out.println("Введите описание задачи");
                 String description = scanner.nextLine();
+                String startTime = scanner.nextLine();
+                LocalDateTime startTimeDate = LocalDateTime.parse(startTime, DateTimeFormatter.ofPattern(DATE_PATTERN));
+                String duration = scanner.nextLine();
                 if (type == TaskType.TASK) {
-                    Task task = new Task(description, name);
+                    Task task = new Task(description, name, startTimeDate, Integer.parseInt(duration));
                     taskManager.addTask(task);
                 } else if (type == TaskType.EPIC) {
-                    Epic task = new Epic(description, name);
+                    Epic task = new Epic(description, name, startTimeDate, Integer.parseInt(duration));
                     taskManager.addEpic(task);
                 } else if (type == TaskType.SUBTASK) {
                     System.out.println("Введите id главной задачи");
                     id = Integer.parseInt(scanner.nextLine());
-                    SubTask task = new SubTask(description, name, id);
+                    SubTask task = new SubTask(description, name, id, startTimeDate, Integer.parseInt(duration));
                     taskManager.addSubtask(task);
                 }
                 break;
@@ -80,19 +86,25 @@ public class Main {
                     status = TaskStatus.valueOf(newStatus);
                 }
                 if (type == TaskType.TASK) {
-                    Task task = new Task(description, name);
+                    LocalDateTime startTimeDate2 = LocalDateTime.parse(DATE_PATTERN, DateTimeFormatter.ofPattern(DATE_PATTERN));
+                    String duration2 = scanner.nextLine();
+                    Task task = new Task(description, name, startTimeDate2, Integer.parseInt(duration2));
                     task.setId(id);
                     task.setStatus(status);
                     taskManager.refresh(task);
                 } else if (type == TaskType.SUBTASK) {
                     System.out.println("Введите идентификатор основной задачи");
                     int epicId = Integer.parseInt(scanner.nextLine());
-                    SubTask task = new SubTask(description, name, epicId);
+                    LocalDateTime startTimeDate2 = LocalDateTime.parse(DATE_PATTERN, DateTimeFormatter.ofPattern(DATE_PATTERN));
+                    String duration2 = scanner.nextLine();
+                    SubTask task = new SubTask(description, name, epicId, startTimeDate2, Integer.parseInt(duration2));
                     task.setId(id);
                     task.setStatus(status);
                     taskManager.refresh(task);
                 } else if (type == TaskType.EPIC) {
-                    Epic task = new Epic(description, name);
+                    LocalDateTime startTimeDate2 = LocalDateTime.parse(DATE_PATTERN, DateTimeFormatter.ofPattern(DATE_PATTERN));
+                    String duration2 = scanner.nextLine();
+                    Epic task = new Epic(description, name, startTimeDate2, Integer.parseInt(duration2));
                     task.setId(id);
                     taskManager.refresh(task);
                 }
@@ -122,7 +134,9 @@ public class Main {
                     description = scanner.nextLine();
                     System.out.println("Введите идентификатор эпика");
                     int epicId = Integer.parseInt(scanner.nextLine());
-                    SubTask task = new SubTask(description, name, epicId);
+                    LocalDateTime startTimeDate2 = LocalDateTime.parse(DATE_PATTERN, DateTimeFormatter.ofPattern(DATE_PATTERN));
+                    String duration2 = scanner.nextLine();
+                    SubTask task = new SubTask(description, name, epicId, startTimeDate2, Integer.parseInt(duration2));
                     taskManager.addSubtask(task);
                 } else {
                     System.out.println("Неверно выбран тип");

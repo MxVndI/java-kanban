@@ -1,16 +1,24 @@
 package com.yandex.app.model;
 
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.TreeSet;
 
 public class Task {
     protected int id;
     protected String description;
     protected String name;
     protected TaskStatus status;
+    protected int duration;
+    protected LocalDateTime startTime;
 
-    public Task(String name, String description) {
+    public Task(String name, String description, LocalDateTime startTime, int duration) {
         this.description = description;
         this.name = name;
+        this.startTime = startTime;
+        this.duration = duration;
         status = TaskStatus.NEW;
     }
 
@@ -73,6 +81,29 @@ public class Task {
                 ", description='" + description + '\'' +
                 ", id=" + id +
                 ", status=" + status +
+                ", startTime='" + startTime + '\'' +
+                ", duration='" + duration + '\'' +
                 '}';
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalDateTime getEndTime(){
+        LocalDateTime endTime = startTime.plusMinutes(duration);
+        return endTime;
     }
 }

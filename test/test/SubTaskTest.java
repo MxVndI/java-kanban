@@ -9,6 +9,8 @@ import com.yandex.app.service.Managers;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SubTaskTest {
@@ -23,9 +25,10 @@ public class SubTaskTest {
 
     @Test
     public void testSubTaskEquals() {
-        Epic epic = new Epic("epic", "AAAA");
+        Epic epic = new Epic("epic", "AAAA", LocalDateTime.now(), 10);
+        System.out.println(epic.toString());
         taskManager.addEpic(epic);
-        SubTask task = new SubTask("Test addNewTask", "Test addNewTask description", epic.getId());
+        SubTask task = new SubTask("Test addNewTask", "Test addNewTask description", epic.getId(), LocalDateTime.now(), 10);
         taskManager.addSubtask(task);
         final int taskID = task.getId();
         final Task savedTask = taskManager.getByCode(taskID);
@@ -50,8 +53,8 @@ public class SubTaskTest {
 
     @Test
     public void testSubTaskFieldsEquals() {
-        Epic epic = new Epic("fds", "f");
-        SubTask task = new SubTask("Test addNewTask", "Test addNewTask description", epic.getId());
+        Epic epic = new Epic("fds", "f", LocalDateTime.now(), 10);
+        SubTask task = new SubTask("Test addNewTask", "Test addNewTask description", epic.getId(), LocalDateTime.now(), 10);
         taskManager.addTask(task);
         assertEquals(task.getName(), taskManager.getByCode(task.getId()).getName());
         assertEquals(task.getDescription(), taskManager.getByCode(task.getId()).getDescription());
@@ -62,9 +65,9 @@ public class SubTaskTest {
 
     @Test
     public void testChangesTaskInHistory() {
-        Epic epic = new Epic("nm", "dsc");
+        Epic epic = new Epic("nm", "dsc", LocalDateTime.now(), 10);
         taskManager.addEpic(epic);
-        SubTask task = new SubTask("Test addNewTask", "Test addNewTask description", epic.getId());
+        SubTask task = new SubTask("Test addNewTask", "Test addNewTask description", epic.getId(), LocalDateTime.now(), 10);
         historyManager.add(task);
 
         task.setName("bla bla");

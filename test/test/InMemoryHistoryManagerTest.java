@@ -6,6 +6,8 @@ import com.yandex.app.service.Managers;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -25,9 +27,9 @@ public class InMemoryHistoryManagerTest {
 
     @Test
     public void historyManagerAddTest() {
-        Task task1 = new Task("fg", "fdg");
+        Task task1 = new Task("fg", "fdg", LocalDateTime.now(), 10);
         historyManager.add(task1);
-        Task task2 = new Task("task", "second");
+        Task task2 = new Task("task", "second",LocalDateTime.now(), 10);
         historyManager.add(task2);
         assertNotNull(historyManager.getHistory());
         historyManager.add(task1);
@@ -36,9 +38,9 @@ public class InMemoryHistoryManagerTest {
 
     @Test
     public void historyManagerDeleteTest() {
-        Task task1 = new Task("fg", "fdg");
+        Task task1 = new Task("fg", "fdg",LocalDateTime.now(), 10);
         historyManager.add(task1);
-        Task task2 = new Task("task", "second");
+        Task task2 = new Task("task", "second",LocalDateTime.now(), 10);
         historyManager.add(task2);
         assertNotNull(historyManager.getHistory());
         historyManager.add(task1);

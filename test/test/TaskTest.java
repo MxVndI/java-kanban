@@ -7,6 +7,8 @@ import com.yandex.app.service.Managers;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TaskTest {
@@ -21,7 +23,7 @@ public class TaskTest {
 
     @Test
     public void testTaskIdEquals() {
-        Task task = new Task("Test addNewTask", "Test addNewTask description");
+        Task task = new Task("Test addNewTask", "Test addNewTask description", LocalDateTime.now(), 10);
         taskManager.addTask(task);
         final int taskID = task.getId();
         final Task savedTask = taskManager.getByCode(taskID);
@@ -30,7 +32,7 @@ public class TaskTest {
 
     @Test
     public void testTaskFieldsEquals() {
-        Task task = new Task("Test addNewTask", "Test addNewTask description");
+        Task task = new Task("Test addNewTask", "Test addNewTask description", LocalDateTime.now(), 10);
         taskManager.addTask(task);
         assertEquals(task.getName(), taskManager.getByCode(task.getId()).getName());
         assertEquals(task.getDescription(), taskManager.getByCode(task.getId()).getDescription());
@@ -41,7 +43,7 @@ public class TaskTest {
 
     @Test
     public void testChangesTaskInHistory() {
-        Task task = new Task("Test addNewTask", "Test addNewTask description");
+        Task task = new Task("Test addNewTask", "Test addNewTask description", LocalDateTime.now(), 10);
         historyManager.add(task);
         task.setName("aya");
         assertEquals(task, historyManager.getHistory().get(0));
