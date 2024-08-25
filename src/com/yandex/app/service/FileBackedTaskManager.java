@@ -96,12 +96,12 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 task.setStatus(TaskStatus.valueOf(data[3]));
                 return task;
             case EPIC:
-                Epic epic = new Epic(data[4], data[2], dt,Integer.parseInt(data[6]));
+                Epic epic = new Epic(data[4], data[2], dt, Integer.parseInt(data[6]));
                 epic.setId(Integer.parseInt(data[0]));
                 epic.setStatus(TaskStatus.valueOf(data[3]));
                 return epic;
             case SUBTASK:
-                SubTask subTask = new SubTask(data[2], data[4], Integer.parseInt(data[5]),dt ,Integer.parseInt(data[7]));
+                SubTask subTask = new SubTask(data[2], data[4], Integer.parseInt(data[5]), dt, Integer.parseInt(data[7]));
                 subTask.setId(Integer.parseInt(data[0]));
                 subTask.setStatus(TaskStatus.valueOf(data[3]));
                 return subTask;
@@ -134,7 +134,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     public void refresh(Task task) {
         FileBackedTaskManager f = new FileBackedTaskManager(file);
         if (task.getType() == TaskType.EPIC) {
-            Epic oldEpic = (Epic)f.getByCode(task.getId());
+            Epic oldEpic = (Epic) f.getByCode(task.getId());
             oldEpic.setName(task.getName());
             oldEpic.setDescription(task.getDescription());
         } else if (task.getType() == TaskType.TASK) {
@@ -142,8 +142,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             oldTask.setName(task.getName());
             oldTask.setDescription(task.getDescription());
         } else if (task.getType() == TaskType.SUBTASK) {
-            Epic epic = (Epic)f.getByCode(((SubTask) task).getEpicId());
-            epic.swapSubTask((SubTask)getByCode(task.getId()), (SubTask) task);
+            Epic epic = (Epic) f.getByCode(((SubTask) task).getEpicId());
+            epic.swapSubTask((SubTask) getByCode(task.getId()), (SubTask) task);
             SubTask oldSubTask = (SubTask) f.getByCode(task.getId());
             oldSubTask.setName(task.getName());
             oldSubTask.setDescription(task.getDescription());
