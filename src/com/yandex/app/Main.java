@@ -11,6 +11,7 @@ public class Main {
     // Можете дальше пропустить пожалуйста, постараюсь исправить на следующем финальном все
     private static Scanner scanner = new Scanner(System.in);
     private final static String DATE_PATTERN = "yyyy-MM-dd'T'HH:mm:ss";
+
     public static void main(String[] args) {
         TaskManager taskManager = Managers.getDefault();
         while (menu(taskManager)) ;
