@@ -87,7 +87,8 @@ public class Main {
                     status = TaskStatus.valueOf(newStatus);
                 }
                 if (type == TaskType.TASK) {
-                    LocalDateTime startTimeDate2 = LocalDateTime.parse(DATE_PATTERN, DateTimeFormatter.ofPattern(DATE_PATTERN));
+                    LocalDateTime startTimeDate2 = LocalDateTime.parse(DATE_PATTERN,
+                            DateTimeFormatter.ofPattern(DATE_PATTERN));
                     String duration2 = scanner.nextLine();
                     Task task = new Task(description, name, startTimeDate2, Integer.parseInt(duration2));
                     task.setId(id);
@@ -96,14 +97,16 @@ public class Main {
                 } else if (type == TaskType.SUBTASK) {
                     System.out.println("Введите идентификатор основной задачи");
                     int epicId = Integer.parseInt(scanner.nextLine());
-                    LocalDateTime startTimeDate2 = LocalDateTime.parse(DATE_PATTERN, DateTimeFormatter.ofPattern(DATE_PATTERN));
+                    LocalDateTime startTimeDate2 = LocalDateTime.parse(DATE_PATTERN,
+                            DateTimeFormatter.ofPattern(DATE_PATTERN));
                     String duration2 = scanner.nextLine();
                     SubTask task = new SubTask(description, name, epicId, startTimeDate2, Integer.parseInt(duration2));
                     task.setId(id);
                     task.setStatus(status);
                     taskManager.refresh(task);
                 } else if (type == TaskType.EPIC) {
-                    LocalDateTime startTimeDate2 = LocalDateTime.parse(DATE_PATTERN, DateTimeFormatter.ofPattern(DATE_PATTERN));
+                    LocalDateTime startTimeDate2 = LocalDateTime.parse(DATE_PATTERN,
+                            DateTimeFormatter.ofPattern(DATE_PATTERN));
                     String duration2 = scanner.nextLine();
                     Epic task = new Epic(description, name, startTimeDate2, Integer.parseInt(duration2));
                     task.setId(id);
@@ -135,7 +138,8 @@ public class Main {
                     description = scanner.nextLine();
                     System.out.println("Введите идентификатор эпика");
                     int epicId = Integer.parseInt(scanner.nextLine());
-                    LocalDateTime startTimeDate2 = LocalDateTime.parse(DATE_PATTERN, DateTimeFormatter.ofPattern(DATE_PATTERN));
+                    LocalDateTime startTimeDate2 = LocalDateTime.parse(DATE_PATTERN,
+                            DateTimeFormatter.ofPattern(DATE_PATTERN));
                     String duration2 = scanner.nextLine();
                     SubTask task = new SubTask(description, name, epicId, startTimeDate2, Integer.parseInt(duration2));
                     taskManager.addSubtask(task);
