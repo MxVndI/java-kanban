@@ -1,6 +1,6 @@
 package com.yandex.app.exception;
 
-public class TaskValidationExeption extends RuntimeException{
+public class TaskValidationExeption extends RuntimeException {
     public TaskValidationExeption() {
     }
 
