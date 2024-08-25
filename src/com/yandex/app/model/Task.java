@@ -1,10 +1,7 @@
 package com.yandex.app.model;
 
-import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.TreeSet;
 
 public class Task {
     protected int id;
