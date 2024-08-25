@@ -13,7 +13,7 @@ public class InMemoryTaskManager implements TaskManager {
     private Map<Integer, Task> tasks = new HashMap<>();
     private Map<Integer, SubTask> subTasks = new HashMap<>();
     private Map<Integer, Epic> epics = new HashMap<>();
-    protected  Map <LocalDateTime, Task> prioritizedTask = new TreeMap<>();
+    protected Map<LocalDateTime, Task> prioritizedTask = new TreeMap<>();
 
     @Override
     public void addSubtask(SubTask task) {
@@ -126,49 +126,49 @@ public class InMemoryTaskManager implements TaskManager {
         return historyManager.getHistory();
     }
 
-    public List<Task> getPrioritizedTask(){
+    public List<Task> getPrioritizedTask() {
         return new ArrayList<>((Collection) prioritizedTask);
     }
 
-    private void calculateEpicDuration(ArrayList<Integer> subTasksId){
-        if (subTasksId.isEmpty()){
+    private void calculateEpicDuration(ArrayList<Integer> subTasksId) {
+        if (subTasksId.isEmpty()) {
             return;
         }
-        for(Integer ids:subTasksId){
-            if(subTasks.get(ids).getStartTime().equals(LocalDateTime.of(0,1,1,0,1))){
+        for (Integer ids : subTasksId) {
+            if (subTasks.get(ids).getStartTime().equals(LocalDateTime.of(0, 1, 1, 0, 1))) {
                 return;
             }
         }
         int epicDuration = 0;
-        for (Integer ids: subTasksId) {
+        for (Integer ids : subTasksId) {
             epicDuration = epicDuration + subTasks.get(ids).getDuration();
         }
         epics.get(subTasks.get(subTasksId.get(0)).getEpicId()).setDuration(epicDuration);
 
     }
 
-    public void validate(Task task){
-        if(task.getStartTime().equals(LocalDateTime.of(0,1,1,0,1))){
+    public void validate(Task task) {
+        if (task.getStartTime().equals(LocalDateTime.of(0, 1, 1, 0, 1))) {
             task.setStartTime(LocalDateTime.now().withNano(0));
         }
         LocalDateTime startTime = task.getStartTime();
         LocalDateTime endTime = task.getEndTime();
         Integer result = prioritizedTask.values().stream()
-                .map(it->{
-                    if(startTime.isAfter(it.getStartTime())&&endTime.isBefore(it.getEndTime())){
+                .map(it -> {
+                    if (startTime.isAfter(it.getStartTime()) && endTime.isBefore(it.getEndTime())) {
                         return 1;
                     }
-                    if(endTime.isAfter(it.getStartTime())&&endTime.isBefore(it.getEndTime())){
+                    if (endTime.isAfter(it.getStartTime()) && endTime.isBefore(it.getEndTime())) {
                         return 1;
                     }
-                    if(startTime.isAfter(it.getStartTime())&&startTime.isBefore(it.getEndTime())){
+                    if (startTime.isAfter(it.getStartTime()) && startTime.isBefore(it.getEndTime())) {
                         return 1;
                     }
                     return 0;
                 })
                 .reduce(Integer::sum)
                 .orElse(0);
-        if(result>0){
+        if (result > 0) {
             throw new TaskValidationExeption("Время выполнения пересекается с другой задачей!");
         }
     }
