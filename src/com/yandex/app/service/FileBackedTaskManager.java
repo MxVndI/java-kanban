@@ -18,7 +18,7 @@ import java.time.format.DateTimeFormatter;
 public class FileBackedTaskManager extends InMemoryTaskManager {
     private File file;
     private static final String HEADER_FILE = "id,type,name,status,description,epic,startTime,duration \n";
-    private String datePattern = "yyyy-MM-dd'T'HH:mm:ss";
+    private static final String DATE_PATTERN = "yyyy-MM-dd'T'HH:mm:ss";
 
     public FileBackedTaskManager(File file) {
         this.file = file;
@@ -88,7 +88,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private Task fromStringTask(String value) {
         String[] data = value.split(",");
-        LocalDateTime dt = LocalDateTime.parse(data[5], DateTimeFormatter.ofPattern(datePattern));
+        LocalDateTime dt = LocalDateTime.parse(data[5], DateTimeFormatter.ofPattern(DATE_PATTERN));
         switch (TaskType.valueOf(data[1])) {
             case TASK:
                 Task task = new Task(data[2], data[4], dt, Integer.parseInt(data[6]));
@@ -131,20 +131,20 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public void refresh(Task task) {
-        FileBackedTaskManager f = new FileBackedTaskManager(file);
+    public void update(Task task) {
+        super.update(task);
         if (task.getType() == TaskType.EPIC) {
-            Epic oldEpic = (Epic) f.getByCode(task.getId());
+            Epic oldEpic = (Epic) super.getById(task.getId());
             oldEpic.setName(task.getName());
             oldEpic.setDescription(task.getDescription());
         } else if (task.getType() == TaskType.TASK) {
-            Task oldTask = f.getByCode(task.getId());
+            Task oldTask = super.getById(task.getId());
             oldTask.setName(task.getName());
             oldTask.setDescription(task.getDescription());
         } else if (task.getType() == TaskType.SUBTASK) {
-            Epic epic = (Epic) f.getByCode(((SubTask) task).getEpicId());
-            epic.swapSubTask((SubTask) getByCode(task.getId()), (SubTask) task);
-            SubTask oldSubTask = (SubTask) f.getByCode(task.getId());
+            Epic epic = (Epic) super.getById(((SubTask) task).getEpicId());
+            epic.swapSubTask((SubTask) getById(task.getId()), (SubTask) task);
+            SubTask oldSubTask = (SubTask) super.getById(task.getId());
             oldSubTask.setName(task.getName());
             oldSubTask.setDescription(task.getDescription());
         }

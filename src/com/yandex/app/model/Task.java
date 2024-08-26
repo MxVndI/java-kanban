@@ -19,7 +19,13 @@ public class Task {
         status = TaskStatus.NEW;
     }
 
-    public int getId() {
+    public Task(String name, String description) {
+        this.description = description;
+        this.name = name;
+        status = TaskStatus.NEW;
+    }
+
+        public int getId() {
         return id;
     }
 

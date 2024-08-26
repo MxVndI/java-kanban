@@ -22,13 +22,13 @@ public interface TaskManager {
 
     void removeAll(TaskType type);
 
-    Task getByCode(Integer id);
+    Task getById(Integer id);
 
     List<SubTask> getSubTasksEpic(Integer id);
 
     void remove(Integer id);
 
-    void refresh(Task task);
+    void update(Task task);
 
     List<Task> getHistory();
 

@@ -46,7 +46,7 @@ public class Main {
             case "3":
                 System.out.println("Введите идентификатор");
                 Integer id = Integer.parseInt(scanner.nextLine());
-                System.out.println(taskManager.getByCode(id));
+                System.out.println(taskManager.getById(id));
                 break;
             case "4":
                 System.out.println("Введите название задачи");
@@ -92,7 +92,7 @@ public class Main {
                     Task task = new Task(description, name, startTimeDate2, Integer.parseInt(duration2));
                     task.setId(id);
                     task.setStatus(status);
-                    taskManager.refresh(task);
+                    taskManager.update(task);
                 } else if (type == TaskType.SUBTASK) {
                     System.out.println("Введите идентификатор основной задачи");
                     int epicId = Integer.parseInt(scanner.nextLine());
@@ -102,14 +102,14 @@ public class Main {
                     SubTask task = new SubTask(description, name, epicId, startTimeDate2, Integer.parseInt(duration2));
                     task.setId(id);
                     task.setStatus(status);
-                    taskManager.refresh(task);
+                    taskManager.update(task);
                 } else if (type == TaskType.EPIC) {
                     LocalDateTime startTimeDate2 = LocalDateTime.parse(DATE_PATTERN,
                             DateTimeFormatter.ofPattern(DATE_PATTERN));
                     String duration2 = scanner.nextLine();
                     Epic task = new Epic(description, name, startTimeDate2, Integer.parseInt(duration2));
                     task.setId(id);
-                    taskManager.refresh(task);
+                    taskManager.update(task);
                 }
                 break;
             case "6":

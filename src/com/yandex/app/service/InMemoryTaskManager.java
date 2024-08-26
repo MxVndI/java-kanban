@@ -75,7 +75,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Task getByCode(Integer id) {
+    public Task getById(Integer id) {
         Task task = tasks.get(id);
         if (task != null) {
             historyManager.add(task);
@@ -108,7 +108,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void refresh(Task task) {
+    public void update(Task task) {
         if (task.getType() == TaskType.EPIC) {
             Epic oldEpic = epics.get(task.getId());
             oldEpic.setName(task.getName());
@@ -147,7 +147,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     }
 
-    public void validate(Task task) {
+    private void validate(Task task) {
         if (task.getStartTime().equals(LocalDateTime.of(0, 1, 1, 0, 1))) {
             task.setStartTime(LocalDateTime.now().withNano(0));
         }

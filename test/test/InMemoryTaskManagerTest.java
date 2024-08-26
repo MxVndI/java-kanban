@@ -33,9 +33,9 @@ public class InMemoryTaskManagerTest {
         assertNotNull(taskManager.getTasks());
         assertNotNull(taskManager.getEpics());
         assertNotNull(taskManager.getSubTasks());
-        assertNotNull(taskManager.getByCode(task.getId()));
-        assertNotNull(taskManager.getByCode(epic.getId()));
-        assertNotNull(taskManager.getByCode(subTask.getId()));
+        assertNotNull(taskManager.getById(task.getId()));
+        assertNotNull(taskManager.getById(epic.getId()));
+        assertNotNull(taskManager.getById(subTask.getId()));
     }
 
 }

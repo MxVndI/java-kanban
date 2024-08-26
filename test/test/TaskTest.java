@@ -26,7 +26,7 @@ public class TaskTest {
         Task task = new Task("Test addNewTask", "Test addNewTask description", LocalDateTime.now(), 10);
         taskManager.addTask(task);
         final int taskID = task.getId();
-        final Task savedTask = taskManager.getByCode(taskID);
+        final Task savedTask = taskManager.getById(taskID);
         assertEquals(task, savedTask, "Задачи не совпадают.");
     }
 
@@ -34,11 +34,11 @@ public class TaskTest {
     public void testTaskFieldsEquals() {
         Task task = new Task("Test addNewTask", "Test addNewTask description", LocalDateTime.now(), 10);
         taskManager.addTask(task);
-        assertEquals(task.getName(), taskManager.getByCode(task.getId()).getName());
-        assertEquals(task.getDescription(), taskManager.getByCode(task.getId()).getDescription());
-        assertEquals(task.getStatus(), taskManager.getByCode(task.getId()).getStatus());
-        assertEquals(task.getType(), taskManager.getByCode(task.getId()).getType());
-        assertEquals(task.getId(), taskManager.getByCode(task.getId()).getId());
+        assertEquals(task.getName(), taskManager.getById(task.getId()).getName());
+        assertEquals(task.getDescription(), taskManager.getById(task.getId()).getDescription());
+        assertEquals(task.getStatus(), taskManager.getById(task.getId()).getStatus());
+        assertEquals(task.getType(), taskManager.getById(task.getId()).getType());
+        assertEquals(task.getId(), taskManager.getById(task.getId()).getId());
     }
 
     @Test
