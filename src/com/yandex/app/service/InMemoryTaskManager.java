@@ -10,9 +10,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     private HistoryManager historyManager = Managers.getDefaultHistory();
     private int specCode = 0;
-    private Map<Integer, Task> tasks = new HashMap<>();
-    private Map<Integer, SubTask> subTasks = new HashMap<>();
-    private Map<Integer, Epic> epics = new HashMap<>();
+    protected Map<Integer, Task> tasks = new HashMap<>();
+    protected Map<Integer, SubTask> subTasks = new HashMap<>();
+    protected Map<Integer, Epic> epics = new HashMap<>();
     protected Map<LocalDateTime, Task> prioritizedTask = new TreeMap<>();
 
     @Override

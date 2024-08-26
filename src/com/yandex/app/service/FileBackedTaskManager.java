@@ -117,11 +117,11 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 String line = br.readLine();
                 Task task = f.fromStringTask(line);
                 if (task instanceof Epic epic) {
-                    f.addEpic(epic);
+                    f.epics.put(epic.getId(), (Epic)task);
                 } else if (task instanceof SubTask subtask) {
-                    f.addSubtask(subtask);
+                    f.subTasks.put(subtask.getId(), (SubTask) task);
                 } else {
-                    f.addTask(task);
+                    f.tasks.put(task.getId(), task);
                 }
             }
         } catch (IOException e) {
@@ -133,21 +133,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     @Override
     public void update(Task task) {
         super.update(task);
-        if (task.getType() == TaskType.EPIC) {
-            Epic oldEpic = (Epic) super.getById(task.getId());
-            oldEpic.setName(task.getName());
-            oldEpic.setDescription(task.getDescription());
-        } else if (task.getType() == TaskType.TASK) {
-            Task oldTask = super.getById(task.getId());
-            oldTask.setName(task.getName());
-            oldTask.setDescription(task.getDescription());
-        } else if (task.getType() == TaskType.SUBTASK) {
-            Epic epic = (Epic) super.getById(((SubTask) task).getEpicId());
-            epic.swapSubTask((SubTask) getById(task.getId()), (SubTask) task);
-            SubTask oldSubTask = (SubTask) super.getById(task.getId());
-            oldSubTask.setName(task.getName());
-            oldSubTask.setDescription(task.getDescription());
-        }
         save();
     }
 }
