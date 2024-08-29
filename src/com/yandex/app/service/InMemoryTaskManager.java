@@ -123,7 +123,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     public List<Task> getHistory() {
-        return historyManager.getHistory();
+        return HistoryManager.getHistory();
     }
 
     public List<Task> getPrioritizedTask() {
