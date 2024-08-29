@@ -19,7 +19,7 @@ public class Managers {
         return new InMemoryHistoryManager();
     }
 
-    public static Gson getGson(){
+    public static Gson getGson() {
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
         return gsonBuilder.create();
