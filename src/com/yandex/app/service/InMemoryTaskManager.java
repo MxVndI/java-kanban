@@ -8,7 +8,7 @@ import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
 
-    private HistoryManager historyManager = Managers.getDefaultHistory();
+    public HistoryManager historyManager = Managers.getDefaultHistory();
     private int specCode = 0;
     protected Map<Integer, Task> tasks = new HashMap<>();
     protected Map<Integer, SubTask> subTasks = new HashMap<>();
@@ -128,6 +128,11 @@ public class InMemoryTaskManager implements TaskManager {
 
     public List<Task> getPrioritizedTask() {
         return new ArrayList<>((Collection) prioritizedTask);
+    }
+
+    @Override
+    public void save() {
+
     }
 
     private void calculateEpicDuration(ArrayList<Integer> subTasksId) {

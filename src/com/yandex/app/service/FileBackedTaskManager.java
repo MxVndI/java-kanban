@@ -24,7 +24,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         this.file = file;
     }
 
-    private void save() {
+    public void save() {
         try (FileWriter fw = new FileWriter(file)) {
             fw.write(HEADER_FILE);
             for (Task task : getTasks()) {
@@ -117,7 +117,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 String line = br.readLine();
                 Task task = f.fromStringTask(line);
                 if (task instanceof Epic epic) {
-                    f.epics.put(epic.getId(), (Epic)task);
+                    f.epics.put(epic.getId(), (Epic) task);
                 } else if (task instanceof SubTask subtask) {
                     f.subTasks.put(subtask.getId(), (SubTask) task);
                 } else {
