@@ -5,7 +5,6 @@ import com.yandex.app.service.*;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class Main {
@@ -33,7 +32,7 @@ public class Main {
 
         HttpTaskServer httpTaskServer = null;
         try {
-            httpTaskServer = new HttpTaskServer((FileBackedTaskManager) taskManager);
+            httpTaskServer = new HttpTaskServer(taskManager);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
