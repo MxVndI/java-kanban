@@ -93,7 +93,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void remove(Integer id) {  // вот его реализация
+    public void remove(Integer id) {
         if (tasks.containsKey(id)) {
             tasks.remove(id);
         } else if (epics.containsKey(id)) {
@@ -132,7 +132,6 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void save() {
-
     }
 
     private void calculateEpicDuration(ArrayList<Integer> subTasksId) {

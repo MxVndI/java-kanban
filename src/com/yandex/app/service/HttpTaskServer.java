@@ -30,7 +30,7 @@ public class HttpTaskServer {
     private TaskManager manager;
     private Gson gson;
 
-    public HttpTaskServer(FileBackedTaskManager manager) throws IOException {
+    public HttpTaskServer(TaskManager manager) throws IOException {
         this.server = HttpServer.create(new InetSocketAddress("localhost", PORT), 0);
         server.createContext("/tasks", this::handler);
         this.manager = manager;

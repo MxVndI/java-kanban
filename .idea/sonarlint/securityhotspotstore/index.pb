@@ -42,3 +42,13 @@ X
 (test/test/FileBackedTaskManagerTest.java,3\f\3f303de602f9eedd6ba87db77b4ab50b1ed4b597
 V
 &test/test/InMemoryTaskManagerTest.java,f\3\f367bdf26552b1608a673018a347d4df75e42088
+G
+test/test/TaskTest.java,6\7\67f72eea0c94a44a9f5a8d39d834b1bfac01dcd2
+G
+test/test/EpicTest.java,f\6\f666ac7d17132ea3d43b2b1f208450aa93efdaeb
+V
+&src/com/yandex/app/model/TaskType.java,2\d\2d1eb785f3162885a03792c3080a9644d6cce494
+g
+7src/com/yandex/app/exception/RequestFailedExeption.java,b\4\b4e49d3ecf5ba1d2bb3c872c0652a8a3123331d0
+e
+5src/com/yandex/app/service/FileBackedTaskManager.java,8\f\8fbf65925812d5e02500e4c12ee0dff197ccd9a0

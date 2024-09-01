@@ -21,7 +21,7 @@ public class KVTaskClient {
         tokenApi = register(url);
     }
 
-    public String register(String url) {
+    private String register(String url) {
         try {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url + "registered"))
