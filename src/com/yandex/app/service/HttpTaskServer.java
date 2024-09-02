@@ -39,210 +39,55 @@ public class HttpTaskServer {
 
     public void handler(HttpExchange httpExchange) throws IOException {
         try {
-            String path = httpExchange.getRequestURI().getPath();
+            String path = httpExchange.getRequestURI().getPath().substring(7);
             String query = httpExchange.getRequestURI().getQuery();
             String requestMethod = httpExchange.getRequestMethod();
-            switch (requestMethod) {
-                case "GET":
-                    if (Pattern.matches("^/tasks$", path)) {
-                        String response = gson.toJson(manager.getPrioritizedTask());
-                        send(httpExchange, response);
-                    } else if (Pattern.matches("^/tasks/task/$", path)) {
-                        if (query == null) {
-                            String response = gson.toJson(manager.getTasks());
-                            send(httpExchange, response);
-                        } else {
-                            query = query.replaceFirst("id=", "");
-                            int id = parseId(query);
-                            if (id != -1) {
-                                if (!manager.getById(id).equals(null)) {
-                                    String response = gson.toJson(manager.getById(id));
-                                    send(httpExchange, response);
-                                } else {
-                                    httpExchange.sendResponseHeaders(403, 0);
-                                }
-                            } else {
-                                httpExchange.sendResponseHeaders(405, 0);
-                                System.out.println("Введен неверный id.");
-                            }
-                        }
-                    } else if (Pattern.matches("^/tasks/subtask/$", path)) {
-                        if (query == null) {
-                            String response = gson.toJson(manager.getSubTasks());
-                            send(httpExchange, response);
-                        } else {
-                            query = query.replaceFirst("id=", "");
-                            int id = parseId(query);
-                            if (id != -1) {
-                                if (!manager.getById(id).equals(null)) {
-                                    String response = gson.toJson(manager.getById(id));
-                                    send(httpExchange, response);
-                                } else {
-                                    httpExchange.sendResponseHeaders(403, 0);
-                                }
-                            } else {
-                                httpExchange.sendResponseHeaders(405, 0);
-                                System.out.println("Введен неверный id.");
-                            }
-                        }
-                    } else if (Pattern.matches("^/tasks/epic/$", path)) {
-                        if (query == null) {
-                            String response = gson.toJson(manager.getEpics());
-                            send(httpExchange, response);
-                        } else {
-                            query = query.replaceFirst("id=", "");
-                            int id = parseId(query);
-                            if (id != -1) {
-                                if (!manager.getById(id).equals(null)) {
-                                    String response = gson.toJson(manager.getById(id));
-                                    send(httpExchange, response);
-                                } else {
-                                    httpExchange.sendResponseHeaders(403, 0);
-                                }
-                            } else {
-                                httpExchange.sendResponseHeaders(405, 0);
-                                System.out.println("Введен неверный id.");
-                            }
-                        }
-                    } else if (Pattern.matches("^/tasks/subtask/epic/", path)) {
-                        query = query.replaceFirst("id=", "");
-                        int id = parseId(query);
-                        if (id != -1) {
-                            if (!manager.getById(id).equals(null)) {
-                                String response = gson.toJson(manager.getSubTasksEpic(id));
-                                send(httpExchange, response);
-                            } else {
-                                httpExchange.sendResponseHeaders(403, 0);
-                            }
-                        } else {
-                            httpExchange.sendResponseHeaders(405, 0);
-                            System.out.println("Введен неверный id.");
-                        }
-
-                    } else if (Pattern.matches("^/tasks/history$", path)) {
-                        List<Task> tasks = manager.getHistory();
-                        String response = gson.toJson(tasks);
-                        send(httpExchange, response);
+            switch (path) {
+                case "task":
+                    if (requestMethod.equals("GET")) {
+                        getTask(query, httpExchange);
+                    } else if (requestMethod.equals("DELETE")) {
+                        deleteTask(query, httpExchange);
+                    } else if (requestMethod.equals("POST")) {
+                        postTask(httpExchange);
                     }
                     break;
-                case "POST":
-                    if (Pattern.matches("^/tasks/task/$", path)) {
-                        String body = readText(httpExchange);
-                        JsonElement jsonElement = JsonParser.parseString(body);
-                        JsonObject jsonObject = jsonElement.getAsJsonObject();
-                        Task task = gson.fromJson(jsonObject, Task.class);
-                        if (!manager.getById(task.getId()).equals(null)) {
-                            manager.update(task);
-                            String response = "Задача под id = " + task.getId() + "обновлена";
-                            send(httpExchange, response);
-                        } else {
-                            manager.addTask(task);
-                            String response = "Задача под id = " + task.getId() + "создана";
-                            send(httpExchange, response);
-                        }
-                    } else if (Pattern.matches("^/tasks/subtask/$", path)) {
-                        String body = readText(httpExchange);
-                        JsonElement jsonElement = JsonParser.parseString(body);
-                        JsonObject jsonObject = jsonElement.getAsJsonObject();
-                        SubTask subTask = gson.fromJson(jsonObject, SubTask.class);
-                        if (!manager.getById(subTask.getId()).equals(null)) {
-                            manager.update(subTask);
-                            String response = "Подзадача под id = " + subTask.getId() + "обновлена";
-                            send(httpExchange, response);
-                        } else {
-                            manager.addSubtask(subTask);
-                            String response = "Подзадача под id = " + subTask.getId() + "создана";
-                            send(httpExchange, response);
-                        }
-                    } else if (Pattern.matches("^/tasks/epic/$", path)) {
-                        String body = readText(httpExchange);
-                        JsonElement jsonElement = JsonParser.parseString(body);
-                        JsonObject jsonObject = jsonElement.getAsJsonObject();
-                        Epic epic = gson.fromJson(jsonObject, Epic.class);
-                        if (!manager.getById(epic.getId()).equals(null)) {
-                            manager.update(epic);
-                            String response = "Епик-задача под id = " + epic.getId() + "обновлена";
-                            send(httpExchange, response);
-                        } else {
-                            manager.addEpic(epic);
-                            String response = "Епик-задача под id = " + epic.getId() + "создана";
-                            send(httpExchange, response);
-                        }
+                case "subtask": {
+                    if (requestMethod.equals("GET")) {
+                        getSubtask(query, httpExchange);
+                    } else if (requestMethod.equals("DELETE")) {
+                        deleteSubtask(query, httpExchange);
+                    } else if (requestMethod.equals("POST")) {
+                        postSubtask(httpExchange);
+                    }
+                }
+                break;
+                case "epic": {
+                    if (requestMethod.equals("GET")) {
+                        getEpic(query, httpExchange);
+                    } else if (requestMethod.equals("DELETE")) {
+                        deleteEpic(query, httpExchange);
+                    } else if (requestMethod.equals("POST")) {
+                        postEpic(httpExchange);
                     }
                     break;
-                case "DELETE":
-                    if (Pattern.matches("^/tasks/task/$", path)) {
-                        if (query != null) {
-                            query = query.replaceFirst("id=", "");
-                            int id = parseId(query);
-                            if (id != -1) {
-                                if (!manager.getById(id).equals(null)) {
-                                    manager.remove(id);
-                                    httpExchange.sendResponseHeaders(200, 1);
-                                    System.out.println("Удалена задача с индефитикатором - " + id);
-                                } else {
-                                    httpExchange.sendResponseHeaders(403, 0);
-                                }
-                            } else {
-                                httpExchange.sendResponseHeaders(405, 0);
-                                System.out.println("Введен неверный id.");
-                            }
-
-                        } else {
-                            manager.removeAll(TaskType.TASK);
-                            httpExchange.sendResponseHeaders(200, 1);
-                            System.out.println("Все задачи были удалены.");
-                        }
-                    } else if (Pattern.matches("^/tasks/subtask/$", path)) {
-                        if (query != null) {
-                            query = query.replaceFirst("id=", "");
-                            int id = parseId(query);
-                            if (id != -1) {
-                                if (!manager.getById(id).equals(null)) {
-                                    manager.remove(id);
-                                    httpExchange.sendResponseHeaders(200, 1);
-                                    System.out.println("Удалена подзадача с индефитикатором - " + id);
-                                } else {
-                                    httpExchange.sendResponseHeaders(403, 0);
-                                }
-                            } else {
-                                httpExchange.sendResponseHeaders(405, 0);
-                                System.out.println("Введен неверный id.");
-                            }
-                        } else {
-                            manager.removeAll(TaskType.SUBTASK);
-                            httpExchange.sendResponseHeaders(200, 1);
-                            System.out.println("Все подзадачи были удалены.");
-                        }
-                    } else if (Pattern.matches("^/tasks/epic/$", path)) {
-                        if (query != null) {
-                            query = query.replaceFirst("id=", "");
-                            int id = parseId(query);
-                            if (id != -1) {
-                                if (!manager.getById(id).equals(null)) {
-                                    manager.remove(id);
-                                    httpExchange.sendResponseHeaders(200, 1);
-                                    System.out.println("Удалена епик-задача с индефитикатором - " + id);
-                                } else {
-                                    httpExchange.sendResponseHeaders(403, 0);
-                                }
-                            } else {
-                                httpExchange.sendResponseHeaders(405, 0);
-                                System.out.println("Введен неверный id.");
-                            }
-                        } else {
-                            manager.removeAll(TaskType.EPIC);
-                            httpExchange.sendResponseHeaders(200, 1);
-                            System.out.println("Все епик-задачи были удалены.");
-                        }
+                }
+                case "history": {
+                    if (requestMethod.equals("GET")) {
+                        getHistory(httpExchange);
                     }
                     break;
+                }
+                case "subtask/epic": {
+                    if (requestMethod.equals("GET")) {
+                        getEpicSubtask(query, httpExchange);
+                    }
+                }
                 default:
                     System.out.println("неправильный URL, проверьте ссылку!");
                     httpExchange.sendResponseHeaders(404, 0);
                     break;
             }
-
         } catch (Exception e) {
             System.out.println("Произошла ошибка");
 
@@ -288,5 +133,205 @@ public class HttpTaskServer {
     @Override
     public boolean equals(Object obj) {
         return super.equals(obj);
+    }
+
+    private void getTask(String query, HttpExchange httpExchange) throws IOException {
+        if (query == null) {
+            String response = gson.toJson(manager.getTasks());
+            send(httpExchange, response);
+        } else {
+            query = query.replaceFirst("id=", "");
+            int id = parseId(query);
+            if (id != -1) {
+                if (!manager.getById(id).equals(null)) {
+                    String response = gson.toJson(manager.getById(id));
+                    send(httpExchange, response);
+                } else {
+                    httpExchange.sendResponseHeaders(403, 0);
+                }
+            } else {
+                httpExchange.sendResponseHeaders(405, 0);
+                System.out.println("Введен неверный id.");
+            }
+        }
+    }
+
+    private void deleteTask(String query, HttpExchange httpExchange) throws IOException {
+        if (query != null) {
+            query = query.replaceFirst("id=", "");
+            int id = parseId(query);
+            if (id != -1) {
+                if (!manager.getById(id).equals(null)) {
+                    manager.remove(id);
+                    httpExchange.sendResponseHeaders(200, 1);
+                    System.out.println("Удалена задача с индефитикатором - " + id);
+                } else {
+                    httpExchange.sendResponseHeaders(403, 0);
+                }
+            } else {
+                httpExchange.sendResponseHeaders(405, 0);
+                System.out.println("Введен неверный id.");
+            }
+
+        } else {
+            manager.removeAll(TaskType.TASK);
+            httpExchange.sendResponseHeaders(200, 1);
+            System.out.println("Все задачи были удалены.");
+        }
+    }
+
+    private void postTask(HttpExchange httpExchange) throws IOException {
+        String body = readText(httpExchange);
+        JsonElement jsonElement = JsonParser.parseString(body);
+        JsonObject jsonObject = jsonElement.getAsJsonObject();
+        Task task = gson.fromJson(jsonObject, Task.class);
+        if (!manager.getById(task.getId()).equals(null)) {
+            manager.update(task);
+            String response = "Задача под id = " + task.getId() + "обновлена";
+            send(httpExchange, response);
+        } else {
+            manager.addTask(task);
+            String response = "Задача под id = " + task.getId() + "создана";
+            send(httpExchange, response);
+        }
+    }
+
+    private void getSubtask(String query, HttpExchange httpExchange) throws IOException {
+        if (query == null) {
+            String response = gson.toJson(manager.getSubTasks());
+            send(httpExchange, response);
+        } else {
+            query = query.replaceFirst("id=", "");
+            int id = parseId(query);
+            if (id != -1) {
+                if (!manager.getById(id).equals(null)) {
+                    String response = gson.toJson(manager.getById(id));
+                    send(httpExchange, response);
+                } else {
+                    httpExchange.sendResponseHeaders(403, 0);
+                }
+            } else {
+                httpExchange.sendResponseHeaders(405, 0);
+                System.out.println("Введен неверный id.");
+            }
+        }
+    }
+
+    private void deleteSubtask(String query, HttpExchange httpExchange) throws IOException {
+        if (query != null) {
+            query = query.replaceFirst("id=", "");
+            int id = parseId(query);
+            if (id != -1) {
+                if (!manager.getById(id).equals(null)) {
+                    manager.remove(id);
+                    httpExchange.sendResponseHeaders(200, 1);
+                    System.out.println("Удалена подзадача с индефитикатором - " + id);
+                } else {
+                    httpExchange.sendResponseHeaders(403, 0);
+                }
+            } else {
+                httpExchange.sendResponseHeaders(405, 0);
+                System.out.println("Введен неверный id.");
+            }
+        }
+    }
+
+    private void postSubtask(HttpExchange httpExchange) throws IOException {
+        String body = readText(httpExchange);
+        JsonElement jsonElement = JsonParser.parseString(body);
+        JsonObject jsonObject = jsonElement.getAsJsonObject();
+        SubTask subTask = gson.fromJson(jsonObject, SubTask.class);
+        if (!manager.getById(subTask.getId()).equals(null)) {
+            manager.update(subTask);
+            String response = "Подзадача под id = " + subTask.getId() + "обновлена";
+            send(httpExchange, response);
+        } else {
+            manager.addSubtask(subTask);
+            String response = "Подзадача под id = " + subTask.getId() + "создана";
+            send(httpExchange, response);
+        }
+    }
+
+    private void getEpic(String query, HttpExchange httpExchange) throws IOException {
+        if (query == null) {
+            String response = gson.toJson(manager.getEpics());
+            send(httpExchange, response);
+        } else {
+            query = query.replaceFirst("id=", "");
+            int id = parseId(query);
+            if (id != -1) {
+                if (!manager.getById(id).equals(null)) {
+                    String response = gson.toJson(manager.getById(id));
+                    send(httpExchange, response);
+                } else {
+                    httpExchange.sendResponseHeaders(403, 0);
+                }
+            } else {
+                httpExchange.sendResponseHeaders(405, 0);
+                System.out.println("Введен неверный id.");
+            }
+        }
+    }
+
+    private void deleteEpic(String query, HttpExchange httpExchange) throws IOException {
+        if (query != null) {
+            query = query.replaceFirst("id=", "");
+            int id = parseId(query);
+            if (id != -1) {
+                if (!manager.getById(id).equals(null)) {
+                    manager.remove(id);
+                    httpExchange.sendResponseHeaders(200, 1);
+                    System.out.println("Удалена епик-задача с индефитикатором - " + id);
+                } else {
+                    httpExchange.sendResponseHeaders(403, 0);
+                }
+            } else {
+                httpExchange.sendResponseHeaders(405, 0);
+                System.out.println("Введен неверный id.");
+            }
+        } else {
+            manager.removeAll(TaskType.EPIC);
+            httpExchange.sendResponseHeaders(200, 1);
+            System.out.println("Все епик-задачи были удалены.");
+        }
+    }
+
+    private void postEpic(HttpExchange httpExchange) throws IOException {
+        String body = readText(httpExchange);
+        JsonElement jsonElement = JsonParser.parseString(body);
+        JsonObject jsonObject = jsonElement.getAsJsonObject();
+        Epic epic = gson.fromJson(jsonObject, Epic.class);
+        if (!manager.getById(epic.getId()).equals(null)) {
+            manager.update(epic);
+            String response = "Епик-задача под id = " + epic.getId() + "обновлена";
+            send(httpExchange, response);
+        } else {
+            manager.addEpic(epic);
+            String response = "Епик-задача под id = " + epic.getId() + "создана";
+            send(httpExchange, response);
+        }
+    }
+
+    private void getHistory(HttpExchange httpExchange) throws IOException {
+        List<Task> tasks = manager.getHistory();
+        String response = gson.toJson(tasks);
+        send(httpExchange, response);
+    }
+
+    private void getEpicSubtask(String query, HttpExchange httpExchange) throws IOException {
+        query = query.replaceFirst("id=", "");
+        int id = parseId(query);
+        if (id != -1) {
+            if (!manager.getById(id).equals(null)) {
+                String response = gson.toJson(manager.getSubTasksEpic(id));
+                send(httpExchange, response);
+            } else {
+                httpExchange.sendResponseHeaders(403, 0);
+            }
+        } else {
+            httpExchange.sendResponseHeaders(405, 0);
+            System.out.println("Введен неверный id.");
+        }
+
     }
 }
