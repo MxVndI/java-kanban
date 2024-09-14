@@ -1,13 +1,14 @@
-package com.yandex.app.test;
+package test;
 
 import com.yandex.app.model.Epic;
 import com.yandex.app.model.SubTask;
 import com.yandex.app.model.Task;
-import com.yandex.app.service.InMemoryHistoryManager;
 import com.yandex.app.service.InMemoryTaskManager;
 import com.yandex.app.service.Managers;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -21,20 +22,20 @@ public class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void CreateDifferentTasks() {
-        Task task = new Task("Test addNewTask", "Test addNewTask description");
+    public void createDifferentTasks() {
+        Task task = new Task("Test addNewTask", "Test addNewTask description", LocalDateTime.now(), 10);
         taskManager.addTask(task);
-        Epic epic = new Epic("epic", "desc");
+        Epic epic = new Epic("epic", "desc", LocalDateTime.now(), 10);
         taskManager.addEpic(epic);
-        SubTask subTask = new SubTask("gf", "hghg", epic.getId());
+        SubTask subTask = new SubTask("gf", "hghg", epic.getId(), LocalDateTime.now(), 10);
         taskManager.addTask(subTask);
 
         assertNotNull(taskManager.getTasks());
         assertNotNull(taskManager.getEpics());
         assertNotNull(taskManager.getSubTasks());
-        assertNotNull(taskManager.getByCode(task.getId()));
-        assertNotNull(taskManager.getByCode(epic.getId()));
-        assertNotNull(taskManager.getByCode(subTask.getId()));
+        assertNotNull(taskManager.getById(task.getId()));
+        assertNotNull(taskManager.getById(epic.getId()));
+        assertNotNull(taskManager.getById(subTask.getId()));
     }
 
 }

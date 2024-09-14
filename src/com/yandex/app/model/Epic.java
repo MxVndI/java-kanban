@@ -1,13 +1,20 @@
 package com.yandex.app.model;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Epic extends Task {
 
     private List<SubTask> subTasks;
+    private LocalDateTime endTime;
 
-    public Epic(String description, String name) {
+    public Epic(String name, String description, LocalDateTime startTime, int duration) {
+        super(description, name, startTime, duration);
+        subTasks = new ArrayList<SubTask>();
+    }
+
+    public Epic(String name, String description) {
         super(description, name);
         subTasks = new ArrayList<SubTask>();
     }
@@ -19,11 +26,20 @@ public class Epic extends Task {
 
     public void addSubTask(SubTask task) {
         subTasks.add(task);
+        updateEndTime();
         checkStatus();
     }
 
     public ArrayList<SubTask> getSubTasks() {
         return new ArrayList<>(subTasks);
+    }
+
+    private void updateEndTime() {
+        endTime = subTasks.get(0).getEndTime();
+        for (SubTask subTask: subTasks) {
+            if (subTask.getEndTime().isAfter(endTime))
+                endTime = subTask.startTime;
+        }
     }
 
     public void removeSubtasks() {
@@ -48,6 +64,8 @@ public class Epic extends Task {
                 ", id=" + getId() +
                 ", status=" + getStatus() +
                 ", subTasks=" + subTasks +
+                ", startTime='" + startTime + '\'' +
+                ", duration='" + duration + '\'' +
                 '}';
     }
 
@@ -80,5 +98,17 @@ public class Epic extends Task {
         subTasks.remove(oldTask);
         subTasks.add(newTask);
         checkStatus();
+    }
+
+    @Override
+    public LocalDateTime getStartTime() {
+        if (!subTasks.isEmpty())
+            startTime = subTasks.get(0).startTime;
+        else startTime = LocalDateTime.of(1,1,1,1,1,1);
+        for (SubTask subTask: subTasks) {
+            if (subTask.startTime.isBefore(startTime))
+                startTime = subTask.startTime;
+        }
+        return startTime;
     }
 }

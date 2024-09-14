@@ -41,7 +41,7 @@ public class InMemoryHistoryManager implements HistoryManager {
                 tail = node;
             }
             size++;
-            removeNode(node);
+            removeNodeCopies(node);
         }
 
         private List<Task> getTasks() {
@@ -59,23 +59,48 @@ public class InMemoryHistoryManager implements HistoryManager {
             }
         }
 
-        private void removeNode(Node<T> node) {
-            Set<Task> set = new HashSet<>();
+        private void removeNodeCopies(Node<T> node) {
+            int countNodes = 0;
             Node<T> temp = head;
-            if (taskList.size != 0) {
-                while (temp != null) {
-                    if (node.data.equals(temp.data) && set.contains(node.data)) {
+            while (temp != null) {
+                if (node.data.equals(temp.data)) {
+                    countNodes++;
+                }
+                temp = temp.next;
+            }
+            temp = head;
+            while (countNodes != 1 && temp != null) {
+                if (node.data.equals(temp.data)) {
+                    if (node.data.equals(head.data)) {
+                        head = head.next;
+                    } else {
                         temp.prev.next = temp.next;
                         temp.next.prev = temp.prev;
-                        size--;
-                        return;
                     }
-                    set.add(temp.data);
-                    temp = temp.next;
+                    countNodes--;
                 }
+                temp = temp.next;
+            }
+        }
 
+        private void removeNode(Node<T> node) {
+            Node<T> temp = head;
+            while (temp != null) {
+                if (node.data.equals(temp.data)) {
+                    if (node.data.equals(head.data)) {
+                        head = head.next;
+                    } else if (node.data.equals(tail.data)) {
+                        tail.prev.next = null;
+                        tail = tail.prev;
+                    } else {
+                        temp.prev.next = temp.next;
+                        temp.next.prev = temp.prev;
+                    }
+                }
+                temp = temp.next;
             }
         }
     }
 }
+
 

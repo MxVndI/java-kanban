@@ -5,7 +5,6 @@ import com.yandex.app.model.SubTask;
 import com.yandex.app.model.Task;
 import com.yandex.app.model.TaskType;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public interface TaskManager {
@@ -23,13 +22,17 @@ public interface TaskManager {
 
     void removeAll(TaskType type);
 
-    Task getByCode(Integer id);
+    Task getById(Integer id);
 
     List<SubTask> getSubTasksEpic(Integer id);
 
-    void removeByCode(Integer id);
+    void remove(Integer id);
 
-    void refresh(Task task);
+    void update(Task task);
 
     List<Task> getHistory();
+
+    List<Task> getPrioritizedTask();
+
+    void save();
 }
